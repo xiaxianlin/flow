@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "strictBindCallApply": true,
+        "sourceMap": false,
+        "target": "es5",
+        "module": "es6",
+        "moduleResolution": "node",
+        "declaration": true,
+        "declarationMap": false,
+        "lib": ["DOM", "ES5", "ES6", "ESNext"],
+        "outDir": "lib"
+    },
+    "include": ["src/**/*", "node_modules/zrender/**/*"]
+}
