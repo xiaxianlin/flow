@@ -13,5 +13,12 @@ export interface IGraph {
 }
 
 export interface IVertex {}
+export interface IVertexAttribute {
+    x: number
+    y: number
+    width: number
+    height: number
+    text?: string | string[]
+}
 
 export interface IEdge {}

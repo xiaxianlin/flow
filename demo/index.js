@@ -1,3 +1,1 @@
-const flow = new Flow(document.getElementById('container'))
-
-
+const flow = new Flow.Container(document.getElementById('container'))
