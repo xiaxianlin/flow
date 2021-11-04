@@ -1,9 +1,7 @@
-import typescript from '@rollup/plugin-typescript'
+import typescript from 'rollup-plugin-typescript'
+import commonjs from '@rollup/plugin-commonjs'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
-
-const path = require('path')
-const resolvDir = (dir) => path.join(__dirname, dir)
 
 const config = {
     input: './src/index.ts',
@@ -14,6 +12,7 @@ const config = {
     },
     plugins: [
         typescript(),
+        commonjs(),
         livereload(),
         serve({
             port: 9090,
