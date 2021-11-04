@@ -7,7 +7,7 @@
     "license": "MIT",
     "scripts": {
         "clean": "rm -rf lib",
-        "start": "rollup -c -w"
+        "start": "rollup -c -w ./src"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^17.1.0",

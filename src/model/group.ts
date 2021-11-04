@@ -1,3 +1,5 @@
-class Group {}
+class Group {
+    addVertex() {}
+}
 
 export default Group

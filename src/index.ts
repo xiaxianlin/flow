@@ -1,7 +1,3 @@
-import Container from './container'
-
-import Vertex from './model/vertex'
-
-const Flow = { Container, Vertex }
+import Flow from './container'
 
 export default Flow
