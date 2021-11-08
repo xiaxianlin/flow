@@ -6,6 +6,7 @@ import Group from './model/group'
 import { ITheme, IVertexAttribute } from './interface'
 import { VertexType } from './constant/vertex'
 import { DEFAULT_THEME } from './constant'
+import { Text } from 'zrender'
 
 class Container {
     private render: zrender.ZRenderType = null
@@ -13,7 +14,7 @@ class Container {
     private theme: ITheme = null
 
     constructor(container: HTMLElement, width?: number, height?: number) {
-        this.render = zrender.init(container, { width, height })
+        this.render = zrender.init(container, { width, height, renderer: 'svg' })
         this.graph = new Graph()
         this.theme = Object.assign({}, DEFAULT_THEME)
     }
@@ -34,8 +35,8 @@ class Container {
      * @param attribute 顶点属性
      * @returns 顶点ID
      */
-    addVertex(type: VertexType, subType: VertexType, attribute?: IVertexAttribute): string {
-        let v = new Vertex(type, subType, attribute, this.theme)
+    addVertex(type: VertexType, attribute?: IVertexAttribute): string {
+        let v = new Vertex(type, attribute, this.theme)
         // 入图
         this.graph.addVertex(v)
         // 获取视图
@@ -43,6 +44,10 @@ class Container {
         // 渲染视图
         this.render.add(view)
         return v.id
+    }
+
+    createIcon(fontFamily: string, text: string, x: number = 16, y: number = 16): Text {
+        return new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
     }
 
     update(id: string) {}

@@ -7,7 +7,6 @@ import Process from '../view/process'
 class Vertex implements IVertex {
     public id: string
     private type: VertexType
-    private subType: VertexType
     private status: VertexStatus
     private groupId: string
     private attribute: IVertexAttribute
@@ -17,16 +16,15 @@ class Vertex implements IVertex {
     private createView() {
         switch (this.type) {
             case VertexType.PROCESS:
-                this.view = new Process(this.subType, this.attribute, this.theme)
+                this.view = new Process(this.attribute, this.theme)
                 break
         }
     }
 
-    constructor(type: VertexType, subType: VertexType, attribute: IVertexAttribute = {}, theme: ITheme) {
+    constructor(type: VertexType, attribute: IVertexAttribute = {}, theme: ITheme) {
         this.id = vid()
         this.type = type
-        this.subType = subType
-        this.attribute = Object.assign(attribute, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT })
+        this.attribute = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, attribute)
         this.theme = theme
         this.createView()
     }

@@ -4,6 +4,8 @@ import { ITheme } from '../interface'
 export const FONT_FAMILY = 'sans-serif,Arial,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"'
 export const FONT_SIZE = 12
 export const LINE_HEIGHT = 18
+// 连接点
+export const C_RADIUS = 4
 // 顶点
 export const V_WIDTH = 150
 export const V_HEIGHT = 60

@@ -1,4 +1,4 @@
-import { Group } from 'zrender'
+import { Group, Text } from 'zrender'
 
 export interface IFlow {
     addVertex(): void
@@ -64,6 +64,7 @@ export interface IVertexAttribute {
     width?: number
     height?: number
     text?: string | string[]
+    icon?: Text
 }
 
 export interface IEdge {}

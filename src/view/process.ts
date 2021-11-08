@@ -1,48 +1,50 @@
-import { Group, Rect, Text } from 'zrender'
+import { Circle, Group, Rect, Text } from 'zrender'
 import { V_RADIUS } from '../constant'
 import { VertexType } from '../constant/vertex'
-import { ITheme, IVertexAttribute, IView } from '../interface'
+import { ITheme, IVertexAttribute } from '../interface'
+import BaseView from './base'
 
-class Process implements IView {
-    private group: Group
-    private attribute: IVertexAttribute
-    private theme: ITheme
+class Process extends BaseView {
+    private background: Rect
+    private text: Text
+    private icon: Text
 
-    constructor(type: VertexType, attribute: IVertexAttribute, theme: ITheme) {
-        this.group = new Group()
-        this.attribute = attribute
-        this.theme = theme
-    }
-
-    text() {
+    setText() {
         let { text, width, height } = this.attribute
         let { vertex } = this.theme
         // 单行文本
         if (typeof text === 'string') {
-            let view = new Text({
+            this.text = new Text({
                 style: { x: width / 2, y: height / 2, text, fill: vertex.text, align: 'center', verticalAlign: 'middle' },
             })
-            this.group.add(view)
         }
+        this.group.add(this.text)
     }
 
-    icon() {}
+    setTypeIcon() {
+        let { vertex } = this.theme
+        let { icon } = this.attribute
+        if (!icon) return
+        this.icon = icon
+        this.icon.attr({ style: { fill: vertex.text } })
+        this.group.add(this.icon)
+    }
 
-    connectors() {}
-
-    background() {
+    setBackground() {
         let { width, height } = this.attribute
         let { border, background } = this.theme.vertex
-        let view = new Rect({
+        this.background = new Rect({
             shape: { x: 0, y: 0, r: V_RADIUS, width, height },
             style: { stroke: border, fill: background },
         })
-        this.group.add(view)
+        this.group.add(this.background)
     }
 
     render() {
-        this.background()
-        this.text()
+        this.setBackground()
+        this.setTypeIcon()
+        this.setConnectors()
+        this.setText()
         return this.group
     }
 }

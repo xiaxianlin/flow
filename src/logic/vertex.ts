@@ -1,3 +1,5 @@
+import { IconType } from '../constant/icon'
+import { VertexType } from '../constant/vertex'
 import { IVertexAttribute } from '../interface'
 import { TAxis } from '../type'
 
