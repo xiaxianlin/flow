@@ -1,4 +1,5 @@
 import { Group, Text } from 'zrender'
+import { VertexButtonType } from './constant/vertex'
 
 export interface IFlow {
     addVertex(): void
@@ -23,6 +24,11 @@ export interface ITheme {
         border: string
         background: string
         active?: {
+            text?: string
+            border?: string
+            background?: string
+        }
+        button?: {
             text?: string
             border?: string
             background?: string
@@ -58,17 +64,28 @@ export interface IModel {
 
 export interface IVertex extends IModel {}
 
-export interface IVertexAttribute {
+export interface IVertexProps {
     x?: number
     y?: number
     width?: number
     height?: number
-    text?: string | string[]
+    text?: string
     icon?: Text
+}
+
+export type TButton = {
+    icon: Text
+    handler: (...args: any[]) => void
+}
+
+export interface IVertexButtonProps {
+    type: VertexButtonType
+    buttons: TButton[]
 }
 
 export interface IEdge {}
 
 export interface IView {
+    setButtons(buttons: IVertexButtonProps): void
     render(): Group
 }

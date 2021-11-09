@@ -3,7 +3,7 @@ import Graph from './model/graph'
 import Vertex from './model/Vertex'
 import Edge from './model/edge'
 import Group from './model/group'
-import { ITheme, IVertexAttribute } from './interface'
+import { ITheme, IVertexButtonProps, IVertexProps } from './interface'
 import { VertexType } from './constant/vertex'
 import { DEFAULT_THEME } from './constant'
 import { Text } from 'zrender'
@@ -17,6 +17,10 @@ class Container {
         this.render = zrender.init(container, { width, height, renderer: 'svg' })
         this.graph = new Graph()
         this.theme = Object.assign({}, DEFAULT_THEME)
+
+        this.render.on('click', (evt) => {
+            console.log(evt.target)
+        })
     }
 
     /**
@@ -35,8 +39,11 @@ class Container {
      * @param attribute 顶点属性
      * @returns 顶点ID
      */
-    addVertex(type: VertexType, attribute?: IVertexAttribute): string {
+    addVertex(type: VertexType, attribute?: IVertexProps, buttons?: IVertexButtonProps): string {
         let v = new Vertex(type, attribute, this.theme)
+        if (buttons) {
+            v.setButtons(buttons)
+        }
         // 入图
         this.graph.addVertex(v)
         // 获取视图
@@ -46,8 +53,9 @@ class Container {
         return v.id
     }
 
-    createIcon(fontFamily: string, text: string, x: number = 16, y: number = 16): Text {
-        return new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
+    createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
+        let icon = new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
+        return icon
     }
 
     update(id: string) {}

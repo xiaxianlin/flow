@@ -1,36 +1,45 @@
-import { Circle, Group, Rect, Text } from 'zrender'
-import { V_RADIUS } from '../constant'
+import { Circle, Group, Rect, Text, TextStyleProps } from 'zrender'
+import { clone } from 'zrender/lib/core/util'
+import { FONT_SIZE, V_RADIUS } from '../constant'
 import { VertexType } from '../constant/vertex'
-import { ITheme, IVertexAttribute } from '../interface'
+import { ITheme, IVertexProps } from '../interface'
+import { cutText } from '../logic/vertex'
 import BaseView from './base'
 
 class Process extends BaseView {
     private background: Rect
-    private text: Text
-    private icon: Text
 
-    setText() {
+    renderText() {
         let { text, width, height } = this.attribute
         let { vertex } = this.theme
-        // 单行文本
-        if (typeof text === 'string') {
-            this.text = new Text({
-                style: { x: width / 2, y: height / 2, text, fill: vertex.text, align: 'center', verticalAlign: 'middle' },
-            })
-        }
-        this.group.add(this.text)
+        let lines = cutText(text, FONT_SIZE, width - 40)
+        let tStyle: TextStyleProps = { x: width / 2, fill: vertex.text, align: 'center', verticalAlign: 'middle', fontSize: FONT_SIZE }
+
+        let len = lines.length
+        let lineHeight = 18
+        // 行起始位置
+        let start = height / 2 - (len > 1 ? 9 : 0)
+        lines.forEach((line, index) => {
+            // 最多只显示2行
+            if (index > 1) return
+            // 超出2行，第2行添加省略号
+            if (index == 1 && len > 2) {
+                line = line.substring(0, line.length - 1) + '...'
+            }
+            let t = new Text({ style: { y: start + index * lineHeight, text: line, ...tStyle } })
+            this.group.add(t)
+        })
     }
 
-    setTypeIcon() {
+    renderTypeIcon() {
         let { vertex } = this.theme
         let { icon } = this.attribute
         if (!icon) return
-        this.icon = icon
-        this.icon.attr({ style: { fill: vertex.text } })
-        this.group.add(this.icon)
+        icon = new Text({ style: { ...icon.style, fill: vertex.text } })
+        this.group.add(icon)
     }
 
-    setBackground() {
+    renderBackground() {
         let { width, height } = this.attribute
         let { border, background } = this.theme.vertex
         this.background = new Rect({
@@ -41,10 +50,11 @@ class Process extends BaseView {
     }
 
     render() {
-        this.setBackground()
-        this.setTypeIcon()
-        this.setConnectors()
-        this.setText()
+        this.renderBackground()
+        this.renderTypeIcon()
+        this.renderConnectors()
+        this.renderText()
+        this.renderOuterButtons()
         return this.group
     }
 }

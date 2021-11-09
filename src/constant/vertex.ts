@@ -23,3 +23,8 @@ export const enum VertexStatus {
     PAUSE = 'pause',
     DISABELD = 'disabled',
 }
+
+export const enum VertexButtonType {
+    OUTER = 'outer',
+    INNER = 'inner',
+}

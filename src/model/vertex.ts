@@ -1,6 +1,6 @@
 import { V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexStatus, VertexType } from '../constant/vertex'
-import { ITheme, IVertex, IVertexAttribute, IView } from '../interface'
+import { ITheme, IVertex, IVertexButtonProps, IVertexProps, IView } from '../interface'
 import { vid } from '../logic/common'
 import Process from '../view/process'
 
@@ -9,7 +9,7 @@ class Vertex implements IVertex {
     private type: VertexType
     private status: VertexStatus
     private groupId: string
-    private attribute: IVertexAttribute
+    private attribute: IVertexProps
     private theme: ITheme
     private view: IView = null
 
@@ -21,7 +21,7 @@ class Vertex implements IVertex {
         }
     }
 
-    constructor(type: VertexType, attribute: IVertexAttribute = {}, theme: ITheme) {
+    constructor(type: VertexType, attribute: IVertexProps = {}, theme: ITheme) {
         this.id = vid()
         this.type = type
         this.attribute = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, attribute)
@@ -40,6 +40,10 @@ class Vertex implements IVertex {
     setPosition(x: number, y: number) {
         this.attribute.x = x
         this.attribute.y = y
+    }
+
+    setButtons(buttons: IVertexButtonProps) {
+        this.view.setButtons(buttons)
     }
 
     getView(): IView {

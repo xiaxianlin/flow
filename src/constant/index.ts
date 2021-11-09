@@ -27,6 +27,11 @@ export const DEFAULT_THEME: ITheme = {
             border: '#0057d1',
             background: '#1653fa',
         },
+        button: {
+            text: '#3883f8',
+            border: '#cfdaef',
+            background: '#f4f7fd',
+        },
     },
     connector: {
         border: '#569cff',
