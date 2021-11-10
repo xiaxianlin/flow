@@ -1,33 +1,44 @@
-import * as zrender from 'zrender'
-import Graph from './model/graph'
-import Vertex from './model/Vertex'
-import Edge from './model/edge'
-import Group from './model/group'
-import { ITheme, IVertexButtonProps, IVertexProps } from './interface'
-import { VertexType } from './constant/vertex'
+import { init, Group, ElementEvent, Text, ZRenderType } from 'zrender'
 import { DEFAULT_THEME } from './constant'
-import { Text } from 'zrender'
+import { VertexStatus, VertexType } from './constant/vertex'
+import Graph from './graph'
+import { RenderType, TTheme } from './type'
+import { IContainer, IGraph, IVertexButtonProps, IVertexModel, IVertexProps } from './interface'
+import VertexModel from './model/Vertex'
 
-class Container {
-    private render: zrender.ZRenderType = null
-    private graph: Graph = null
-    private theme: ITheme = null
+class Container implements IContainer {
+    private render: ZRenderType
+    private theme: TTheme
+    private graph: IGraph
+    private layer: RenderType
+    private active: IVertexModel
+
+    private handleClick(evt: ElementEvent) {
+        if (!evt.target && this.active) {
+            this.active.setStatus(VertexStatus.NONE)
+        }
+    }
 
     constructor(container: HTMLElement, width?: number, height?: number) {
-        this.render = zrender.init(container, { width, height, renderer: 'svg' })
+        this.render = init(container, { width, height, renderer: 'svg' })
         this.graph = new Graph()
+        this.layer = new Group({ draggable: true, x: 0, y: 0 })
         this.theme = Object.assign({}, DEFAULT_THEME)
 
-        this.render.on('click', (evt) => {
-            console.log(evt.target)
-        })
+        this.render.add(this.layer)
+
+        this.render.on('click', (evt) => this.handleClick(evt))
+    }
+
+    setActive(model: IVertexModel): void {
+        this.active = model
     }
 
     /**
      * 设置主题颜色
      * @param theme 主题配置
      */
-    settingTheme(theme: ITheme) {
+    settingTheme(theme: TTheme) {
         this.theme = theme
     }
 
@@ -40,16 +51,15 @@ class Container {
      * @returns 顶点ID
      */
     addVertex(type: VertexType, attribute?: IVertexProps, buttons?: IVertexButtonProps): string {
-        let v = new Vertex(type, attribute, this.theme)
+        let v = new VertexModel(type, attribute, this.theme)
+        v.setContainer(this)
         if (buttons) {
             v.setButtons(buttons)
         }
         // 入图
         this.graph.addVertex(v)
-        // 获取视图
-        let view = v.getView().render()
         // 渲染视图
-        this.render.add(view)
+        this.layer.add(v.render())
         return v.id
     }
 

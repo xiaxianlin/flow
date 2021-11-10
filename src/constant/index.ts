@@ -1,4 +1,4 @@
-import { ITheme } from '../interface'
+import { TTheme } from '../interface'
 
 // 字体
 export const FONT_FAMILY = 'sans-serif,Arial,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"'
@@ -17,18 +17,18 @@ export const G_HEAD_HEIGHT = 32
 export const G_ITEM_HEIGHT = 30
 export const G_ITEM_MARGIN = 5
 
-export const DEFAULT_THEME: ITheme = {
+export const DEFAULT_THEME: TTheme = {
     vertex: {
-        text: '#ffffff',
+        color: '#ffffff',
         border: '#4082e6',
         background: '#5a97f2',
         active: {
-            text: '#ffffff',
+            color: '#ffffff',
             border: '#0057d1',
             background: '#1653fa',
         },
         button: {
-            text: '#3883f8',
+            color: '#3883f8',
             border: '#cfdaef',
             background: '#f4f7fd',
         },
@@ -47,11 +47,11 @@ export const DEFAULT_THEME: ITheme = {
         border: '#d3d9e2',
         background: '#ffffff',
         header: {
-            text: '#666e79',
+            color: '#666e79',
             background: 'f4f7fd',
         },
         button: {
-            text: '#ffffff',
+            color: '#ffffff',
             background: '#3883f8',
         },
     },
