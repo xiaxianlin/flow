@@ -31,6 +31,11 @@ let quickButtons = {
     ],
 }
 
+flow.addVertex('event', { x: 500, y: 100, text: '开始' }, quickButtons)
+flow.addVertex('event', { x: 500, y: 300, text: '结束' }, quickButtons)
+
 flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon }, quickButtons)
 flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon }, quickButtons)
 flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, quickButtons)
+
+flow.addVertex('confluence', { x: 800, y: 200 }, quickButtons)

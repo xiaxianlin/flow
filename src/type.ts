@@ -1,4 +1,4 @@
-import { Group, Text } from 'zrender'
+import { Text, Group } from 'zrender'
 
 export type RenderType = Group
 

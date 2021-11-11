@@ -1,4 +1,4 @@
-import { Circle, ElementEvent, Group, Rect, Text } from 'zrender'
+import { Circle, ElementEvent, Group, Path, Rect, Text } from 'zrender'
 import { C_RADIUS } from '../constant'
 import { VertexButtonType } from '../constant/vertex'
 import { TAxis, TButton, TEvent, RenderType, TTheme, TStyle } from '../type'
@@ -12,7 +12,7 @@ class BaseView implements IView {
     protected style: TStyle
     protected buttons: IVertexButtonProps
     protected events: TEvent[]
-    protected background: Rect // 背景
+    protected background: Path // 背景
     protected text: Text[]
     protected connectors: Circle[] // 连接点
     protected buttonLayer: Group // 按钮层

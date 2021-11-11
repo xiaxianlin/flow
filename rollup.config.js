@@ -1,5 +1,6 @@
-import typescript from 'rollup-plugin-typescript'
+import typescript from '@rollup/plugin-typescript'
 import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
 import livereload from 'rollup-plugin-livereload'
 import serve from 'rollup-plugin-serve'
 
@@ -12,6 +13,7 @@ const config = {
     },
     plugins: [
         typescript(),
+        nodeResolve(),
         commonjs(),
         livereload(),
         serve({

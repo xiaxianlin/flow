@@ -1,4 +1,4 @@
-import { init, Group, ElementEvent, Text, ZRenderType } from 'zrender'
+import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
@@ -31,6 +31,9 @@ class Container implements IContainer {
     }
 
     setActive(model: IVertexModel): void {
+        if (this.active) {
+            this.active.setStatus(VertexStatus.NONE)
+        }
         this.active = model
     }
 

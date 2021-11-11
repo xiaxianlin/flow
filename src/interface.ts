@@ -31,6 +31,8 @@ export interface IView {
 }
 
 export interface IProcessView extends IView {}
+export interface IEventView extends IView {}
+export interface IConfluenceView extends IView {}
 
 export interface IVertexProps {
     x?: number

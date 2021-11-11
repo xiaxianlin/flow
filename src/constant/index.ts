@@ -1,4 +1,4 @@
-import { TTheme } from '../interface'
+import { TTheme } from '../type'
 
 // 字体
 export const FONT_FAMILY = 'sans-serif,Arial,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"'
