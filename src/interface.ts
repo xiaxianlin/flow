@@ -15,7 +15,9 @@ export interface IModel {
 }
 
 export interface IVertexModel extends IModel {
+    isGroup: boolean
     setStatus(status: VertexStatus): void
+    add(child: IVertexModel): void
 }
 
 export interface IEdgeModel extends IModel {}
@@ -33,6 +35,7 @@ export interface IView {
 export interface IProcessView extends IView {}
 export interface IEventView extends IView {}
 export interface IConfluenceView extends IView {}
+export interface IGroupView extends IView {}
 
 export interface IVertexProps {
     x?: number

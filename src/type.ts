@@ -22,6 +22,19 @@ export type TStyle = {
     background?: string
 }
 
+export type TGroupStyle = {
+    border: string
+    background: string
+    header: {
+        color: string
+        background: string
+    }
+    button: {
+        color: string
+        background: string
+    }
+}
+
 /**
  * 主题色
  */
@@ -58,7 +71,15 @@ export type TTheme = {
             color: string
             background: string
         }
-        button: {
+        active?: {
+            border: string
+            background: string
+            header: {
+                color: string
+                background: string
+            }
+        }
+        button?: {
             color: string
             background: string
         }

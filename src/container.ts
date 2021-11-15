@@ -7,6 +7,12 @@ import { IContainer, IGraph, IVertexButtonProps, IVertexModel, IVertexProps } fr
 import VertexModel from './model/Vertex'
 
 class Container implements IContainer {
+    
+    static createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
+        let icon = new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
+        return icon
+    }
+
     private render: ZRenderType
     private theme: TTheme
     private graph: IGraph
@@ -64,11 +70,6 @@ class Container implements IContainer {
         // 渲染视图
         this.layer.add(v.render())
         return v.id
-    }
-
-    createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
-        let icon = new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
-        return icon
     }
 
     update(id: string) {}

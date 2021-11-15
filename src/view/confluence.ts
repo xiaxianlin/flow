@@ -6,6 +6,12 @@ import BaseView from './base'
 
 class ConfluenceView extends BaseView implements IConfluenceView {
     protected model: IVertexModel
+    private icon: Circle
+
+    setStyle(style: TStyle): void {
+        super.setStyle(style)
+        this.icon.attr({ style: { stroke: style.color, fill: style.background } })
+    }
 
     renderBackground() {
         let { border, background } = this.style
@@ -20,11 +26,11 @@ class ConfluenceView extends BaseView implements IConfluenceView {
     renderIcon() {
         let { color, background } = this.style
         let r = V_HEIGHT / 2
-        let icon = new Circle({
+        this.icon = new Circle({
             shape: { cx: r, cy: r, r: r - 15 },
             style: { stroke: color, fill: background, lineWidth: 3 },
         })
-        this.view.add(icon)
+        this.view.add(this.icon)
     }
 
     render(styles?: TStyle[]) {

@@ -48,7 +48,15 @@ export const DEFAULT_THEME: TTheme = {
         background: '#ffffff',
         header: {
             color: '#666e79',
-            background: 'f4f7fd',
+            background: '#f4f7fd',
+        },
+        active: {
+            border: '#6597f6',
+            background: '#fbfdff',
+            header: {
+                color: '#31353b',
+                background: '#d7e4ff',
+            },
         },
         button: {
             color: '#ffffff',
