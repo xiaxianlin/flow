@@ -7,38 +7,26 @@ let manualIcon = Flow.createIcon('iconfont', '\ue981')
 let taskIcon = Flow.createIcon('iconfont', '\ue96d')
 let groupIcon = Flow.createIcon('iconfont', '\uea87')
 let autoIcon = Flow.createIcon('iconfont', '\ueb34')
+let addIcon = Flow.createIcon('iconfont', '\ue615')
+let editIcon = Flow.createIcon('iconfont', '\ue813')
 
-let quickButtons = {
-    type: 'outer',
-    buttons: [
-        {
-            icon: taskIcon,
-            handler: () => {
-                console.log('create task')
-            },
-        },
-        {
-            icon: manualIcon,
-            handler: () => {
-                console.log('create manual')
-            },
-        },
-        {
-            icon: groupIcon,
-            handler: () => {
-                console.log('create group')
-            },
-        },
-    ],
-}
+let buttons = [
+    { type: 'outer', icon: taskIcon, handler: () => console.log('create task') },
+    { type: 'outer', icon: manualIcon, handler: () => console.log('create manual') },
+    { type: 'outer', icon: groupIcon, handler: () => console.log('create group') },
+]
 
-flow.addVertex('event', { x: 500, y: 100, text: '开始' }, quickButtons)
-flow.addVertex('event', { x: 500, y: 300, text: '结束' }, quickButtons)
+flow.addVertex('event', { x: 500, y: 100, text: '开始' }, buttons)
+flow.addVertex('event', { x: 500, y: 300, text: '结束' }, buttons)
 
-flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon }, quickButtons)
-flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon }, quickButtons)
-flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, quickButtons)
+flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon }, buttons)
+flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon }, buttons)
+flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, buttons)
 
-flow.addVertex('confluence', { x: 800, y: 200 }, quickButtons)
+flow.addVertex('confluence', { x: 800, y: 200 }, buttons)
 
-flow.addVertex('group', { x: 800, y: 600, text: '任务分组_1', icon: autoIcon }, quickButtons)
+let groupButtons = buttons.concat([
+    { type: 'group', icon: addIcon, handler: () => console.log('add group item') },
+    { type: 'group', icon: editIcon, handler: () => console.log('edit group') },
+])
+flow.addVertex('group', { x: 800, y: 600, text: '任务分组_1', icon: autoIcon }, groupButtons)

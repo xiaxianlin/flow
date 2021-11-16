@@ -1,6 +1,6 @@
 import { G_HEIGHT, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexStatus, VertexType } from '../constant/vertex'
-import { IVertexModel, IVertexButtonProps, IVertexProps, IProcessView } from '../interface'
+import { IVertexModel, IVertexButtonProp, IVertexProps, IProcessView } from '../interface'
 import { RenderType, TTheme } from '../type'
 import ConfluenceView from '../view/confluence'
 import EventView from '../view/event'
@@ -75,7 +75,7 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.attribute.y = y
     }
 
-    setButtons(buttons: IVertexButtonProps) {
+    setButtons(buttons: IVertexButtonProp[]) {
         this.view.setButtons(buttons)
     }
 
@@ -83,9 +83,9 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.status = status
         if (status === VertexStatus.NONE) {
             if (this.isGroup) {
-                this.view.setStyle(this.theme.group.active)
+                this.view.setStyle(this.theme.group)
             } else {
-                this.view.setStyle(this.theme.vertex.active)
+                this.view.setStyle(this.theme.vertex)
             }
             this.view.hideButtonLayer()
         }

@@ -3,11 +3,10 @@ import { DEFAULT_THEME } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
 import { RenderType, TTheme } from './type'
-import { IContainer, IGraph, IVertexButtonProps, IVertexModel, IVertexProps } from './interface'
+import { IContainer, IGraph, IVertexButtonProp, IVertexModel, IVertexProps } from './interface'
 import VertexModel from './model/Vertex'
 
 class Container implements IContainer {
-    
     static createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
         let icon = new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
         return icon
@@ -20,8 +19,9 @@ class Container implements IContainer {
     private active: IVertexModel
 
     private handleClick(evt: ElementEvent) {
-        if (!evt.target && this.active) {
+        if (!evt.target && !!this.active) {
             this.active.setStatus(VertexStatus.NONE)
+            this.active = null
         }
     }
 
@@ -59,8 +59,8 @@ class Container implements IContainer {
      * @param attribute 顶点属性
      * @returns 顶点ID
      */
-    addVertex(type: VertexType, attribute?: IVertexProps, buttons?: IVertexButtonProps): string {
-        let v = new VertexModel(type, attribute, this.theme)
+    addVertex(type: VertexType, attribute?: IVertexProps, buttons?: IVertexButtonProp[]): string {
+        let v: IVertexModel = new VertexModel(type, attribute, this.theme)
         v.setContainer(this)
         if (buttons) {
             v.setButtons(buttons)

@@ -21,4 +21,5 @@ export const enum VertexStatus {
 export const enum VertexButtonType {
     OUTER = 'outer',
     INNER = 'inner',
+    GROUP = 'group',
 }

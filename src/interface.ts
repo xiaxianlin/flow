@@ -1,5 +1,5 @@
 import { VertexButtonType, VertexStatus } from './constant/vertex'
-import { RenderText, RenderType, TButton, TEvent, TStyle } from './type'
+import { RenderText, RenderType, TEvent, TStyle } from './type'
 
 export interface IContainer {
     setActive(model: IVertexModel): void
@@ -15,8 +15,10 @@ export interface IModel {
 }
 
 export interface IVertexModel extends IModel {
+    id: string
     isGroup: boolean
     setStatus(status: VertexStatus): void
+    setButtons(buttons: IVertexButtonProp[]): void
     add(child: IVertexModel): void
 }
 
@@ -25,7 +27,7 @@ export interface IEdgeModel extends IModel {}
 export interface IView {
     setModel(model: IModel): void
     setStyle(style: TStyle): void
-    setButtons(buttons: IVertexButtonProps): void
+    setButtons(buttons: IVertexButtonProp[]): void
     setEvents(events: TEvent[]): void
     render(styles?: TStyle[]): RenderType
     showButtonLayer(): void
@@ -46,7 +48,9 @@ export interface IVertexProps {
     icon?: RenderText
 }
 
-export interface IVertexButtonProps {
+export interface IVertexButtonProp {
     type: VertexButtonType
-    buttons: TButton[]
+    icon: RenderText
+    order?: number
+    handler: (...args: any[]) => void
 }
