@@ -4,6 +4,7 @@ export const enum VertexType {
     PROCESS = 'process',
     DECISION = 'decision',
     GROUP = 'group',
+    GROUP_ITEM = 'group_item',
     CONFLUENCE = 'confluence',
 }
 
@@ -22,4 +23,9 @@ export const enum VertexButtonType {
     OUTER = 'outer',
     INNER = 'inner',
     GROUP = 'group',
+}
+
+export const enum VertexPropType {
+    ATTRIBUTE = 'attribute',
+    STYLE = 'style',
 }

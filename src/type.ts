@@ -33,7 +33,14 @@ export type TGroupStyle = {
         color: string
         background: string
     }
+    item?: {
+        color: string
+        border: string
+        background: string
+    }
 }
+
+export type TUnionStyle = TStyle | TGroupStyle
 
 /**
  * 主题色
@@ -71,6 +78,11 @@ export type TTheme = {
             color: string
             background: string
         }
+        item?: {
+            color: string
+            border: string
+            background: string
+        }
         active?: {
             border: string
             background: string
@@ -81,6 +93,7 @@ export type TTheme = {
         }
         button?: {
             color: string
+
             background: string
         }
     }

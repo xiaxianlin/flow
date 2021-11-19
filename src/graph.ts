@@ -13,6 +13,10 @@ class Graph implements IGraph {
         this.vertices.set(v.id, v)
     }
 
+    getVertex(id: string) {
+        return this.vertices.get(id)
+    }
+
     addEdge(e: EdgeModel) {}
 }
 

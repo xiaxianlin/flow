@@ -21,8 +21,9 @@ class GroupView extends BaseView implements IGroupView {
 
     renderBackground() {
         let { border, background } = this.style
+        let { height } = this.attribute
         this.background = new Rect({
-            shape: { r: V_RADIUS, width: G_WIDTH, height: G_HEIGHT },
+            shape: { r: V_RADIUS, width: G_WIDTH, height: height },
             style: { stroke: border, fill: background },
         })
         this.view.add(this.background)

@@ -1,5 +1,5 @@
-import { VertexButtonType, VertexStatus } from './constant/vertex'
-import { RenderText, RenderType, TEvent, TStyle } from './type'
+import { VertexButtonType, VertexPropType, VertexStatus } from './constant/vertex'
+import { RenderText, RenderType, TEvent, TStyle, TUnionStyle } from './type'
 
 export interface IContainer {
     setActive(model: IVertexModel): void
@@ -7,6 +7,8 @@ export interface IContainer {
 
 export interface IGraph {
     addVertex(v: IVertexModel): void
+
+    getVertex(id: string): IVertexModel
 }
 
 export interface IModel {
@@ -19,6 +21,7 @@ export interface IVertexModel extends IModel {
     isGroup: boolean
     setStatus(status: VertexStatus): void
     setButtons(buttons: IVertexButtonProp[]): void
+    setAttribute(attribute: IVertexProps): void
     add(child: IVertexModel): void
 }
 
@@ -32,12 +35,15 @@ export interface IView {
     render(styles?: TStyle[]): RenderType
     showButtonLayer(): void
     hideButtonLayer(): void
+    add(view: RenderType): void
+    update(type: VertexPropType, value: IVertexProps | TUnionStyle): void
 }
 
 export interface IProcessView extends IView {}
 export interface IEventView extends IView {}
 export interface IConfluenceView extends IView {}
 export interface IGroupView extends IView {}
+export interface IGroupItemView extends IView {}
 
 export interface IVertexProps {
     x?: number

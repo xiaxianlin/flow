@@ -1,7 +1,7 @@
 import { Circle, ElementEvent, Group, Path, Rect, Text } from 'zrender'
 import { C_RADIUS } from '../constant'
-import { VertexButtonType } from '../constant/vertex'
-import { TAxis, TButton, TEvent, RenderType, TTheme, TStyle } from '../type'
+import { VertexButtonType, VertexPropType } from '../constant/vertex'
+import { TAxis, TButton, TEvent, RenderType, TTheme, TStyle, TUnionStyle } from '../type'
 import { IModel, IVertexButtonProp, IVertexProps, IView } from '../interface'
 import { generateConnectPoints } from '../logic/vertex'
 
@@ -16,6 +16,7 @@ class BaseView implements IView {
     protected text: Text[]
     protected connectors: Circle[] // 连接点
     protected buttonLayer: Group // 按钮层
+    protected childViews: Group[]
 
     protected handleMouseOver(evt: ElementEvent) {
         this.connectors.forEach((c) => c.attr('style', { opacity: 1 }))
@@ -39,15 +40,20 @@ class BaseView implements IView {
         event.handler(evt)
     }
 
-    constructor(attribute: IVertexProps, style: TStyle) {
-        this.style = style
-        this.attribute = attribute
-        this.buttons = []
-        this.view = new Group({ x: attribute.x, y: attribute.y, draggable: true })
+    protected initEvents() {
         this.view.on('mouseover', (evt) => this.handleMouseOver(evt))
         this.view.on('mouseout', (evt) => this.handleMouseLeave(evt))
         this.view.on('click', (evt) => this.handleClick(evt))
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
+    }
+
+    constructor(attribute: IVertexProps, style: TStyle) {
+        this.style = style
+        this.attribute = attribute
+        this.buttons = []
+        this.childViews = []
+        this.view = new Group({ x: attribute.x, y: attribute.y, draggable: true })
+        this.initEvents()
     }
 
     setModel(model: IModel): void {
@@ -68,13 +74,37 @@ class BaseView implements IView {
     }
 
     showButtonLayer() {
-        this.buttonLayer.show()
+        if (this.buttonLayer) {
+            this.buttonLayer.show()
+        }
     }
 
     hideButtonLayer() {
-        this.buttonLayer.hide()
+        if (this.buttonLayer) {
+            this.buttonLayer.hide()
+        }
     }
 
+    /**
+     * 添加子视图
+     * @param view 子视图
+     */
+    add(view: Group): void {
+        this.childViews.push(view)
+        this.view.add(view)
+    }
+
+    /**
+     * 更新视图
+     * @param type 更新属性类型
+     * @param value 更新值
+     */
+    update(type: VertexPropType, value: IVertexProps | TUnionStyle): void {}
+
+    /**
+     * 渲染连接点
+     * @param connectorStyle 连接点样式
+     */
     renderConnectors(connectorStyle: TStyle = {}) {
         let { border, background } = connectorStyle
         let points: TAxis[] = generateConnectPoints(this.attribute)
@@ -90,6 +120,10 @@ class BaseView implements IView {
         })
     }
 
+    /**
+     * 渲染外部按钮
+     * @param btnStyle 按钮样式
+     */
     renderOuterButtons(btnStyle: TStyle = {}) {
         let buttons: IVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.OUTER)
         if (!buttons.length) return

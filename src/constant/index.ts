@@ -12,8 +12,9 @@ export const V_HEIGHT = 60
 export const V_RADIUS = 4
 // 分组
 export const G_WIDTH = 200
-export const G_HEIGHT = 80
+export const G_HEIGHT = 68
 export const G_HEAD_HEIGHT = 32
+export const G_PADDING = 2
 export const G_ITEM_HEIGHT = 30
 export const G_ITEM_MARGIN = 5
 
@@ -61,6 +62,11 @@ export const DEFAULT_THEME: TTheme = {
         button: {
             color: '#ffffff',
             background: '#3883f8',
+        },
+        item: {
+            color: '#ffffff',
+            border: '#4082e6',
+            background: '#5a97f2',
         },
     },
 }

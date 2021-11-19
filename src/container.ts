@@ -72,6 +72,17 @@ class Container implements IContainer {
         return v.id
     }
 
+    addGroupItem(id: string, attribute?: IVertexProps, buttons?: IVertexButtonProp[]) {
+        let v = this.graph.getVertex(id)
+        if (!v.isGroup) return
+        let i: IVertexModel = new VertexModel(VertexType.GROUP_ITEM, attribute, this.theme)
+        i.setContainer(this)
+        if (buttons) {
+            i.setButtons(buttons)
+        }
+        v.add(i)
+    }
+
     update(id: string) {}
 }
 

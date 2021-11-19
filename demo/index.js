@@ -25,8 +25,20 @@ flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出�
 
 flow.addVertex('confluence', { x: 800, y: 200 }, buttons)
 
+let index = 1
 let groupButtons = buttons.concat([
-    { type: 'group', icon: addIcon, handler: () => console.log('add group item') },
+    {
+        type: 'group',
+        icon: addIcon,
+        handler: () => {
+            console.log('add group item')
+            index++
+            flow.addGroupItem(gid, { text: '任务' + index, icon: actionIcon })
+        },
+    },
     { type: 'group', icon: editIcon, handler: () => console.log('edit group') },
 ])
-flow.addVertex('group', { x: 800, y: 600, text: '任务分组_1', icon: autoIcon }, groupButtons)
+
+let gid = flow.addVertex('group', { x: 800, y: 300, text: '任务分组_1', icon: autoIcon }, groupButtons)
+
+flow.addGroupItem(gid, { text: '任务1', icon: actionIcon })
