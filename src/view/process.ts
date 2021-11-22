@@ -2,14 +2,19 @@ import { Rect, Text, TextStyleProps } from 'zrender'
 import { FONT_SIZE, V_RADIUS } from '../constant'
 import { IProcessView, IVertexModel } from '../interface'
 import { cutText } from '../logic/vertex'
-import { TStyle } from '../type'
+import { TStyle, TVertextShape } from '../type'
 import BaseView from './base'
 
 class ProcessView extends BaseView implements IProcessView {
     protected model: IVertexModel
+    protected innerButtonStyle: TStyle
+
+    setInnerButtonStyle(style: TStyle): void {
+        this.innerButtonStyle = style
+    }
 
     renderText() {
-        let { text, width, height } = this.attribute
+        let { text, width, height } = this.shape
         let lines = cutText(text, FONT_SIZE, width - 40)
         let tStyle: TextStyleProps = { x: width / 2, fill: this.style.color, align: 'center', verticalAlign: 'middle', fontSize: FONT_SIZE }
 
@@ -32,14 +37,14 @@ class ProcessView extends BaseView implements IProcessView {
 
     renderTypeIcon() {
         let { color } = this.style
-        let { icon } = this.attribute
+        let { icon } = this.shape
         if (!icon) return
         icon = new Text({ style: { ...icon.style, fill: color } })
         this.view.add(icon)
     }
 
     renderBackground() {
-        let { width, height } = this.attribute
+        let { width, height } = this.shape
         let { border, background } = this.style
         this.background = new Rect({
             shape: { x: 0, y: 0, r: V_RADIUS, width, height },
@@ -52,8 +57,8 @@ class ProcessView extends BaseView implements IProcessView {
         this.renderBackground()
         this.renderTypeIcon()
         this.renderText()
-        this.renderConnectors(styles[0])
-        this.renderOuterButtons(styles[1])
+        this.renderConnectors()
+        this.renderOuterButtons()
         return this.view
     }
 }

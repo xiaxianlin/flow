@@ -1,5 +1,5 @@
-import { VertexButtonType, VertexPropType, VertexStatus } from './constant/vertex'
-import { RenderText, RenderType, TEvent, TStyle, TUnionStyle } from './type'
+import { VertexPropType, VertexStatus } from './constant/vertex'
+import { RenderType, TEvent, TStyle, TVertexButtonProp, TVertextShape } from './type'
 
 export interface IContainer {
     setActive(model: IVertexModel): void
@@ -15,48 +15,39 @@ export interface IModel {
     render(): RenderType
     setContainer(container: IContainer): void
 }
-
 export interface IVertexModel extends IModel {
     id: string
     isGroup: boolean
     setStatus(status: VertexStatus): void
-    setButtons(buttons: IVertexButtonProp[]): void
-    setAttribute(attribute: IVertexProps): void
+    setButtons(buttons: TVertexButtonProp[]): void
+    setShape(shape: TVertextShape): void
     add(child: IVertexModel): void
 }
-
 export interface IEdgeModel extends IModel {}
 
 export interface IView {
     setModel(model: IModel): void
     setStyle(style: TStyle): void
-    setButtons(buttons: IVertexButtonProp[]): void
+    setShape(shape: TVertextShape): void
+    setButtonStyle(style: TStyle): void
     setEvents(events: TEvent[]): void
-    render(styles?: TStyle[]): RenderType
+    setButtons(buttons: TVertexButtonProp[]): void
+
     showButtonLayer(): void
     hideButtonLayer(): void
-    add(view: RenderType): void
-    update(type: VertexPropType, value: IVertexProps | TUnionStyle): void
-}
 
-export interface IProcessView extends IView {}
+    add(view: RenderType): void
+    render(): RenderType
+}
+export interface IProcessView extends IView {
+    setInnerButtonStyle(style: TStyle): void
+}
 export interface IEventView extends IView {}
 export interface IConfluenceView extends IView {}
-export interface IGroupView extends IView {}
-export interface IGroupItemView extends IView {}
-
-export interface IVertexProps {
-    x?: number
-    y?: number
-    width?: number
-    height?: number
-    text?: string
-    icon?: RenderText
+export interface IGroupView extends IView {
+    setGroupHeaderStyle(style: TStyle): void
+    setGroupButtonStyle(style: TStyle): void
 }
-
-export interface IVertexButtonProp {
-    type: VertexButtonType
-    icon: RenderText
-    order?: number
-    handler: (...args: any[]) => void
+export interface IGroupItemView extends IView {
+    setInnerButtonStyle(style: TStyle): void
 }

@@ -1,27 +1,33 @@
-import { Circle, Group, Rect, Text, TextStyleProps } from 'zrender'
-import { FONT_SIZE, G_HEAD_HEIGHT, G_HEIGHT, G_WIDTH, V_HEIGHT, V_RADIUS } from '../constant'
+import { Group, Rect, Text } from 'zrender'
+import { G_HEAD_HEIGHT, G_WIDTH, V_RADIUS } from '../constant'
 import { VertexButtonType } from '../constant/vertex'
-import { IGroupView, IVertexButtonProp, IVertexModel } from '../interface'
+import { IGroupView, IVertexModel } from '../interface'
 import { cutText } from '../logic/vertex'
-import { TGroupStyle, TStyle } from '../type'
+import { TStyle, TVertexButtonProp, TVertextShape } from '../type'
 import BaseView from './base'
 
 class GroupView extends BaseView implements IGroupView {
     protected model: IVertexModel
-    protected style: TGroupStyle
     private headerIcon: Text
     private headerText: Text
     private headerBackground: Rect
+    private headerStyle: TStyle
+    private groupButtonStyle: TStyle
 
-    setStyle(style: TGroupStyle): void {
+    setStyle(style: TStyle): void {
         this.style = style
-        this.background.attr({ style: { stroke: style.border, fill: style.background } })
-        this.headerBackground.attr({ style: { fill: style.header.background } })
+    }
+
+    setGroupHeaderStyle(style: TStyle): void {
+        this.headerStyle = style
+    }
+    setGroupButtonStyle(style: TStyle): void {
+        this.groupButtonStyle = style
     }
 
     renderBackground() {
         let { border, background } = this.style
-        let { height } = this.attribute
+        let { height } = this.shape
         this.background = new Rect({
             shape: { r: V_RADIUS, width: G_WIDTH, height: height },
             style: { stroke: border, fill: background },
@@ -30,8 +36,8 @@ class GroupView extends BaseView implements IGroupView {
     }
 
     renderHeader() {
-        let { icon, text } = this.attribute
-        let { color, background } = this.style.header
+        let { icon, text } = this.shape
+        let { color, background } = this.headerStyle
 
         let header = new Group()
 
@@ -55,14 +61,14 @@ class GroupView extends BaseView implements IGroupView {
     }
 
     renderGroupButtons() {
-        let buttons: IVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.GROUP)
+        let buttons: TVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.GROUP)
         if (!buttons.length) return
 
-        let { color, background } = this.style.button
+        let { color, background } = this.groupButtonStyle
         let bgLen = 24
 
         // buttons = buttons.reverse()
-        buttons.forEach((item: IVertexButtonProp, index: number) => {
+        buttons.forEach((item: TVertexButtonProp, index: number) => {
             let { icon, handler } = item
             let g = new Group({ x: G_WIDTH - (bgLen + 5) * (index + 1), y: (G_HEAD_HEIGHT - bgLen) / 2 })
             g.add(new Rect({ shape: { width: bgLen, height: bgLen, r: 2 }, style: { fill: background, stroke: background } }))
@@ -73,12 +79,12 @@ class GroupView extends BaseView implements IGroupView {
         })
     }
 
-    render(styles?: TStyle[]) {
+    render() {
         this.renderBackground()
         this.renderHeader()
         this.renderGroupButtons()
-        this.renderConnectors(styles[0])
-        this.renderOuterButtons(styles[1])
+        this.renderConnectors()
+        this.renderOuterButtons()
         return this.view
     }
 }

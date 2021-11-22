@@ -1,14 +1,13 @@
 import { V_WIDTH } from '../constant'
-import { IVertexProps } from '../interface'
-import { TAxis } from '../type'
+import { TAxis, TVertextShape } from '../type'
 
 /**
  * 生成顶点的连接点
  * @param attr 顶点属性
  * @returns 四个连点的位置，[上，右，下，左]
- */
+ */ 
 
-export function generateConnectPoints(attr: IVertexProps): TAxis[] {
+export function generateConnectPoints(attr: TVertextShape): TAxis[] {
     let { width, height } = attr
     return [
         [width / 2, 0],

@@ -1,4 +1,5 @@
 import { Text, Group } from 'zrender'
+import { VertexButtonType } from './constant/vertex'
 
 export type RenderType = Group
 
@@ -6,95 +7,68 @@ export type RenderText = Text
 
 export type TAxis = [number, number]
 
+/**
+ * 按钮
+ */
 export type TButton = {
     icon: Text
     handler: (...args: any[]) => void
 }
 
+/**
+ * 事件
+ */
 export type TEvent = {
     name: string
     handler: (...args: any[]) => void
 }
 
+/**
+ * 样式
+ */
 export type TStyle = {
     color?: string
     border?: string
     background?: string
 }
 
-export type TGroupStyle = {
-    border: string
-    background: string
-    header: {
-        color: string
-        background: string
-    }
-    button: {
-        color: string
-        background: string
-    }
-    item?: {
-        color: string
-        border: string
-        background: string
-    }
-}
-
-export type TUnionStyle = TStyle | TGroupStyle
-
 /**
  * 主题色
  */
 export type TTheme = {
-    vertex: {
-        color: string
-        border: string
-        background: string
-        active?: {
-            color?: string
-            border?: string
-            background?: string
-        }
-        button?: {
-            color?: string
-            border?: string
-            background?: string
-        }
-    }
-    connector: {
-        border: string
-        background: string
-    }
-    edge: {
-        border: string
-        active?: {
-            border?: string
-        }
-    }
-    group: {
-        border: string
-        background: string
-        header: {
-            color: string
-            background: string
-        }
-        item?: {
-            color: string
-            border: string
-            background: string
-        }
-        active?: {
-            border: string
-            background: string
-            header: {
-                color: string
-                background: string
-            }
-        }
-        button?: {
-            color: string
+    vertex?: TStyle
+    vertexActive?: TStyle
+    vertexButton?: TStyle
+    vertexConnector?: TStyle
+    edge: TStyle
+    edgeActive: TStyle
+    group: TStyle
+    groupHeader: TStyle
+    groupItem: TStyle
+    groupButton: TStyle
+    groupActive: TStyle
+    groupActiveHeader: TStyle
+}
 
-            background: string
-        }
-    }
+/**
+ * 顶点形状
+ */
+export type TVertextShape = {
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    text?: string
+    icon?: RenderText
+}
+
+/**
+ * 顶点按钮属性
+ */
+export type TVertexButtonProp = {
+    type: VertexButtonType
+    icon: RenderText
+    handler: (...args: any[]) => void
+    style?: TStyle
+    activeStyle?: TStyle
 }

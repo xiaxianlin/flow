@@ -1,14 +1,13 @@
 import { Circle, Text, TextStyleProps } from 'zrender'
 import { FONT_SIZE, V_HEIGHT } from '../constant'
 import { IEventView, IVertexModel } from '../interface'
-import { TStyle } from '../type'
 import BaseView from './base'
 
 class EventView extends BaseView implements IEventView {
     protected model: IVertexModel
 
     renderText() {
-        let { text } = this.attribute
+        let { text } = this.shape
         let tStyle: TextStyleProps = { fill: this.style.color, align: 'center', verticalAlign: 'middle', fontSize: FONT_SIZE }
 
         this.text = [text].map((line) => {
@@ -28,11 +27,11 @@ class EventView extends BaseView implements IEventView {
         this.view.add(this.background)
     }
 
-    render(styles?: TStyle[]) {
+    render() {
         this.renderBackground()
         this.renderText()
-        this.renderConnectors(styles[0])
-        this.renderOuterButtons(styles[1])
+        this.renderConnectors()
+        this.renderOuterButtons()
         return this.view
     }
 }

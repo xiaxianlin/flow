@@ -1,31 +1,29 @@
 import { Rect, Text, TextStyleProps } from 'zrender'
 import { FONT_SIZE, V_RADIUS } from '../constant'
-import { VertexPropType } from '../constant/vertex'
-import { IGroupItemView, IVertexModel, IVertexProps } from '../interface'
+import { IGroupItemView, IVertexModel } from '../interface'
 import { cutText } from '../logic/vertex'
-import { TStyle, TUnionStyle } from '../type'
+import { TStyle } from '../type'
 import BaseView from './base'
 
 class GroupItemView extends BaseView implements IGroupItemView {
     protected model: IVertexModel
+    protected innerButtonStyle: TStyle
 
     protected initEvents() {
         this.view.on('click', (evt) => this.handleClick(evt))
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
     }
 
-    update(type: VertexPropType, value: IVertexProps | TUnionStyle): void {
-        if (type === VertexPropType.ATTRIBUTE) {
-            let { x, y } = value as IVertexProps
-            this.view.attr({ x, y })
-        }
+    setInnerButtonStyle(style: TStyle): void {
+        this.innerButtonStyle = style
     }
 
     renderText() {
-        let { text, width, height } = this.attribute
+        let { text, width, height } = this.shape
+        if (!text) return
+
         let lines = cutText(text, FONT_SIZE, width - 40)
         let tStyle: TextStyleProps = { x: width / 2, y: height / 2, fill: this.style.color, align: 'center', verticalAlign: 'middle', fontSize: FONT_SIZE }
-
         this.text = lines.map((line) => {
             let t = new Text({
                 style: {
@@ -39,15 +37,15 @@ class GroupItemView extends BaseView implements IGroupItemView {
     }
 
     renderTypeIcon() {
-        let { color } = this.style
-        let { icon } = this.attribute
+        let { icon } = this.shape
         if (!icon) return
-        icon = new Text({ style: { ...icon.style, fill: color } })
+        
+        icon = new Text({ style: { ...icon.style, fill: this.style.color } })
         this.view.add(icon)
     }
 
     renderBackground() {
-        let { width, height } = this.attribute
+        let { width, height } = this.shape
         let { border, background } = this.style
         this.background = new Rect({
             shape: { x: 0, y: 0, r: V_RADIUS, width, height },

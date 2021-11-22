@@ -2,8 +2,8 @@ import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
-import { RenderType, TTheme } from './type'
-import { IContainer, IGraph, IVertexButtonProp, IVertexModel, IVertexProps } from './interface'
+import { RenderType, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
 
 class Container implements IContainer {
@@ -56,11 +56,11 @@ class Container implements IContainer {
      *
      * @param type 顶点类型
      * @param subType 顶点子类型
-     * @param attribute 顶点属性
+     * @param shape 顶点属性
      * @returns 顶点ID
      */
-    addVertex(type: VertexType, attribute?: IVertexProps, buttons?: IVertexButtonProp[]): string {
-        let v: IVertexModel = new VertexModel(type, attribute, this.theme)
+    addVertex(type: VertexType, shape?: TVertextShape, buttons?: TVertexButtonProp[]): string {
+        let v: IVertexModel = new VertexModel(type, shape, this.theme)
         v.setContainer(this)
         if (buttons) {
             v.setButtons(buttons)
@@ -72,10 +72,10 @@ class Container implements IContainer {
         return v.id
     }
 
-    addGroupItem(id: string, attribute?: IVertexProps, buttons?: IVertexButtonProp[]) {
+    addGroupItem(id: string, shape?: TVertextShape, buttons?: TVertexButtonProp[]) {
         let v = this.graph.getVertex(id)
         if (!v.isGroup) return
-        let i: IVertexModel = new VertexModel(VertexType.GROUP_ITEM, attribute, this.theme)
+        let i: IVertexModel = new VertexModel(VertexType.GROUP_ITEM, shape, this.theme)
         i.setContainer(this)
         if (buttons) {
             i.setButtons(buttons)

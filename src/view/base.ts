@@ -1,17 +1,21 @@
 import { Circle, ElementEvent, Group, Path, Rect, Text } from 'zrender'
 import { C_RADIUS } from '../constant'
 import { VertexButtonType, VertexPropType } from '../constant/vertex'
-import { TAxis, TButton, TEvent, RenderType, TTheme, TStyle, TUnionStyle } from '../type'
-import { IModel, IVertexButtonProp, IVertexProps, IView } from '../interface'
+import { TAxis, TEvent, RenderType, TStyle, TVertexButtonProp, TVertextShape } from '../type'
+import { IModel, IView } from '../interface'
 import { generateConnectPoints } from '../logic/vertex'
 
 class BaseView implements IView {
     protected model: IModel
     protected view: RenderType
-    protected attribute: IVertexProps
+    protected shape: TVertextShape
     protected style: TStyle
-    protected buttons: IVertexButtonProp[]
+    protected buttonStyle: TStyle
+    protected connectorStyle: TStyle
+
+    protected buttons: TVertexButtonProp[]
     protected events: TEvent[]
+
     protected background: Path // 背景
     protected text: Text[]
     protected connectors: Circle[] // 连接点
@@ -47,12 +51,14 @@ class BaseView implements IView {
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
     }
 
-    constructor(attribute: IVertexProps, style: TStyle) {
+    constructor(shape: TVertextShape, style: TStyle, buttonStyle: TStyle, connectorStyle: TStyle) {
+        this.shape = shape
         this.style = style
-        this.attribute = attribute
+        this.buttonStyle = buttonStyle
+        this.connectorStyle = connectorStyle
         this.buttons = []
         this.childViews = []
-        this.view = new Group({ x: attribute.x, y: attribute.y, draggable: true })
+        this.view = new Group({ x: shape.x, y: shape.y, draggable: true })
         this.initEvents()
     }
 
@@ -60,7 +66,7 @@ class BaseView implements IView {
         this.model = model
     }
 
-    setButtons(buttons: IVertexButtonProp[]) {
+    setButtons(buttons: TVertexButtonProp[]) {
         this.buttons = buttons
     }
 
@@ -68,9 +74,19 @@ class BaseView implements IView {
         this.events = events
     }
 
+    setShape(shape: TVertextShape): void {
+        this.shape = shape
+        this.view.attr({ x: shape.x, y: shape.y })
+    }
+
     setStyle(style: TStyle): void {
         this.style = style
+        this.text.forEach((t) => t && t.attr({ style: { fill: style.color } }))
         this.background.attr({ style: { stroke: style.border, fill: style.background } })
+    }
+
+    setButtonStyle(style: TStyle): void {
+        this.buttonStyle = style
     }
 
     showButtonLayer() {
@@ -95,19 +111,11 @@ class BaseView implements IView {
     }
 
     /**
-     * 更新视图
-     * @param type 更新属性类型
-     * @param value 更新值
-     */
-    update(type: VertexPropType, value: IVertexProps | TUnionStyle): void {}
-
-    /**
      * 渲染连接点
-     * @param connectorStyle 连接点样式
      */
-    renderConnectors(connectorStyle: TStyle = {}) {
-        let { border, background } = connectorStyle
-        let points: TAxis[] = generateConnectPoints(this.attribute)
+    renderConnectors() {
+        let { border, background } = this.connectorStyle
+        let points: TAxis[] = generateConnectPoints(this.shape)
         this.connectors = points.map((p: TAxis) => {
             let [cx, cy] = p
             let c = new Circle({
@@ -122,17 +130,16 @@ class BaseView implements IView {
 
     /**
      * 渲染外部按钮
-     * @param btnStyle 按钮样式
      */
-    renderOuterButtons(btnStyle: TStyle = {}) {
-        let buttons: IVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.OUTER)
+    renderOuterButtons() {
+        let buttons: TVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.OUTER)
         if (!buttons.length) return
 
-        let { color, border, background } = btnStyle
-        let { width, height } = this.attribute
+        let { color, border, background } = this.buttonStyle
+        let { width, height } = this.shape
 
         this.buttonLayer = new Group({ x: width + 10, y: (height - buttons.length * 30 + 10) / 2 })
-        buttons.forEach((item: IVertexButtonProp, index: number) => {
+        buttons.forEach((item: TVertexButtonProp, index: number) => {
             let { icon, handler } = item
             let g = new Group({ x: 0, y: index * 30 })
 

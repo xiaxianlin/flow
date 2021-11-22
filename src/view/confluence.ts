@@ -1,5 +1,5 @@
-import { Circle, Isogon, Text, TextStyleProps } from 'zrender'
-import { FONT_SIZE, V_HEIGHT } from '../constant'
+import { Circle, Isogon } from 'zrender'
+import { V_HEIGHT } from '../constant'
 import { IConfluenceView, IVertexModel } from '../interface'
 import { TStyle } from '../type'
 import BaseView from './base'
@@ -9,8 +9,9 @@ class ConfluenceView extends BaseView implements IConfluenceView {
     private icon: Circle
 
     setStyle(style: TStyle): void {
-        super.setStyle(style)
+        this.style = style
         this.icon.attr({ style: { stroke: style.color, fill: style.background } })
+        this.background.attr({ style: { stroke: style.border, fill: style.background } })
     }
 
     renderBackground() {
@@ -33,11 +34,11 @@ class ConfluenceView extends BaseView implements IConfluenceView {
         this.view.add(this.icon)
     }
 
-    render(styles?: TStyle[]) {
+    render() {
         this.renderBackground()
         this.renderIcon()
-        this.renderConnectors(styles[0])
-        this.renderOuterButtons(styles[1])
+        this.renderConnectors()
+        this.renderOuterButtons()
         return this.view
     }
 }

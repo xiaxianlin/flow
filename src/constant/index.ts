@@ -23,50 +23,50 @@ export const DEFAULT_THEME: TTheme = {
         color: '#ffffff',
         border: '#4082e6',
         background: '#5a97f2',
-        active: {
-            color: '#ffffff',
-            border: '#0057d1',
-            background: '#1653fa',
-        },
-        button: {
-            color: '#3883f8',
-            border: '#cfdaef',
-            background: '#f4f7fd',
-        },
     },
-    connector: {
+    vertexActive: {
+        color: '#ffffff',
+        border: '#0057d1',
+        background: '#1653fa',
+    },
+    vertexButton: {
+        color: '#3883f8',
+        border: '#cfdaef',
+        background: '#f4f7fd',
+    },
+    vertexConnector: {
         border: '#569cff',
         background: '#ffffff',
     },
     edge: {
         border: '#d3d9e2',
-        active: {
-            border: '#5a97f2',
-        },
+    },
+    edgeActive: {
+        border: '#5a97f2',
     },
     group: {
         border: '#d3d9e2',
         background: '#ffffff',
-        header: {
-            color: '#666e79',
-            background: '#f4f7fd',
-        },
-        active: {
-            border: '#6597f6',
-            background: '#fbfdff',
-            header: {
-                color: '#31353b',
-                background: '#d7e4ff',
-            },
-        },
-        button: {
-            color: '#ffffff',
-            background: '#3883f8',
-        },
-        item: {
-            color: '#ffffff',
-            border: '#4082e6',
-            background: '#5a97f2',
-        },
+    },
+    groupItem: {
+        color: '#ffffff',
+        border: '#4082e6',
+        background: '#5a97f2',
+    },
+    groupActive: {
+        border: '#6597f6',
+        background: '#fbfdff',
+    },
+    groupHeader: {
+        color: '#666e79',
+        background: '#f4f7fd',
+    },
+    groupActiveHeader: {
+        color: '#31353b',
+        background: '#d7e4ff',
+    },
+    groupButton: {
+        color: '#ffffff',
+        background: '#3883f8',
     },
 }

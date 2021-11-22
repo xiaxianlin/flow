@@ -26,6 +26,6 @@ export const enum VertexButtonType {
 }
 
 export const enum VertexPropType {
-    ATTRIBUTE = 'attribute',
+    SHAPE = 'shape',
     STYLE = 'style',
 }
