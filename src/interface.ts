@@ -1,13 +1,13 @@
-import { VertexPropType, VertexStatus } from './constant/vertex'
+import { VertexStatus } from './constant/vertex'
 import { RenderType, TEvent, TStyle, TVertexButtonProp, TVertextShape } from './type'
 
 export interface IContainer {
     setActive(model: IVertexModel): void
+    setDragTarget(model: IVertexModel): void
 }
 
 export interface IGraph {
     addVertex(v: IVertexModel): void
-
     getVertex(id: string): IVertexModel
 }
 

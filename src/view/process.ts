@@ -53,7 +53,7 @@ class ProcessView extends BaseView implements IProcessView {
         this.view.add(this.background)
     }
 
-    render(styles?: TStyle[]) {
+    render() {
         this.renderBackground()
         this.renderTypeIcon()
         this.renderText()

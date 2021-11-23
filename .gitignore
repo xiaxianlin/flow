@@ -7,3 +7,4 @@ run.log
 .setting
 yarn-error.log
 yarn.lock
+lib

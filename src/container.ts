@@ -5,6 +5,7 @@ import Graph from './graph'
 import { RenderType, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
+import { MoveType } from './constant/graph'
 
 class Container implements IContainer {
     static createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
@@ -17,12 +18,24 @@ class Container implements IContainer {
     private graph: IGraph
     private layer: RenderType
     private active: IVertexModel
+    private dragTarget: IVertexModel
+    private moveType: MoveType
 
     private handleClick(evt: ElementEvent) {
         if (!evt.target && !!this.active) {
             this.active.setStatus(VertexStatus.NONE)
             this.active = null
         }
+    }
+
+    private handleDrop(evt: ElementEvent) {
+        console.log(evt)
+        if (this.moveType === MoveType.DRAG) {
+            this.dragTarget.setShape({ x: evt.offsetX, y: evt.offsetY })
+        }
+
+        this.moveType = null
+        this.dragTarget = null
     }
 
     constructor(container: HTMLElement, width?: number, height?: number) {
@@ -34,6 +47,7 @@ class Container implements IContainer {
         this.render.add(this.layer)
 
         this.render.on('click', (evt) => this.handleClick(evt))
+        this.render.on('drop', (evt) => this.handleDrop(evt))
     }
 
     setActive(model: IVertexModel): void {
@@ -41,6 +55,11 @@ class Container implements IContainer {
             this.active.setStatus(VertexStatus.NONE)
         }
         this.active = model
+    }
+
+    setDragTarget(model: IVertexModel): void {
+        this.moveType = MoveType.DRAG
+        this.dragTarget = model
     }
 
     /**
@@ -72,6 +91,14 @@ class Container implements IContainer {
         return v.id
     }
 
+    /**
+     * 给分组添加一个子元素
+     *
+     * @param id 分组id
+     * @param shape 图形信息
+     * @param buttons 按钮信息
+     * @returns 子元素id
+     */
     addGroupItem(id: string, shape?: TVertextShape, buttons?: TVertexButtonProp[]) {
         let v = this.graph.getVertex(id)
         if (!v.isGroup) return
@@ -81,6 +108,7 @@ class Container implements IContainer {
             i.setButtons(buttons)
         }
         v.add(i)
+        return i.id
     }
 
     update(id: string) {}

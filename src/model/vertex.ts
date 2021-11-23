@@ -1,3 +1,4 @@
+import { ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
@@ -10,7 +11,6 @@ import ProcessView from '../view/process'
 import BaseModel from './base'
 
 class VertexModel extends BaseModel implements IVertexModel {
-    private type: VertexType
     private status: VertexStatus
     private shape: TVertextShape
     private children: IVertexModel[] = []
@@ -22,6 +22,10 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.contaienr.setActive(this)
         this.view.setStyle(this.isGroup ? this.theme.groupActive : this.theme.vertexActive)
         this.view.showButtonLayer()
+    }
+
+    private handleDragStart(evt: ElementEvent) {
+        this.contaienr.setDragTarget(this)
     }
 
     private viewFactory(type: VertexType): IView {
@@ -53,7 +57,6 @@ class VertexModel extends BaseModel implements IVertexModel {
 
     constructor(type: VertexType, shape: TVertextShape = {}, theme: TTheme) {
         super()
-        this.type = type
         this.shape = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, shape)
         this.theme = theme
         this.status = VertexStatus.NONE
@@ -76,7 +79,10 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.view = this.viewFactory(type)
         if (this.view) {
             this.view.setModel(this)
-            this.view.setEvents([{ name: 'click', handler: () => this.handleClick() }])
+            this.view.setEvents([
+                { name: 'click', handler: () => this.handleClick() },
+                { name: 'dragstart', handler: (evt) => this.handleDragStart(evt) },
+            ])
         }
     }
 

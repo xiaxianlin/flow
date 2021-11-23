@@ -73,7 +73,10 @@ class GroupView extends BaseView implements IGroupView {
             let g = new Group({ x: G_WIDTH - (bgLen + 5) * (index + 1), y: (G_HEAD_HEIGHT - bgLen) / 2 })
             g.add(new Rect({ shape: { width: bgLen, height: bgLen, r: 2 }, style: { fill: background, stroke: background } }))
             g.add(new Text({ style: { ...icon.style, fontSize: 12, fill: color, x: bgLen / 2, y: bgLen / 2 } }))
-            g.on('click', (evt) => handler(evt))
+            g.on('click', (evt) => {
+                evt.cancelBubble = false
+                handler(evt)
+            })
 
             this.view.add(g)
         })

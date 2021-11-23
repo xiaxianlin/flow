@@ -39,7 +39,7 @@ class GroupItemView extends BaseView implements IGroupItemView {
     renderTypeIcon() {
         let { icon } = this.shape
         if (!icon) return
-        
+
         icon = new Text({ style: { ...icon.style, fill: this.style.color } })
         this.view.add(icon)
     }
@@ -54,7 +54,7 @@ class GroupItemView extends BaseView implements IGroupItemView {
         this.view.add(this.background)
     }
 
-    render(styles?: TStyle[]) {
+    render() {
         this.renderBackground()
         this.renderTypeIcon()
         this.renderText()

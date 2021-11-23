@@ -44,11 +44,19 @@ class BaseView implements IView {
         event.handler(evt)
     }
 
+    protected handleDragStart(evt: ElementEvent) {
+        let event = this.events.find((e) => e.name === 'dragstart')
+        if (!event) return
+        evt.cancelBubble = true
+        event.handler(evt)
+    }
+
     protected initEvents() {
         this.view.on('mouseover', (evt) => this.handleMouseOver(evt))
         this.view.on('mouseout', (evt) => this.handleMouseLeave(evt))
         this.view.on('click', (evt) => this.handleClick(evt))
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
+        this.view.on('dragstart', (evt) => this.handleDragStart(evt))
     }
 
     constructor(shape: TVertextShape, style: TStyle, buttonStyle: TStyle, connectorStyle: TStyle) {

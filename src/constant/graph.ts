@@ -6,3 +6,9 @@ export const enum GraphStatus {
     DISABLED = 'disabled',
     SELECTING = 'selecting',
 }
+
+export const enum MoveType {
+    DRAG = 'drag',
+    LINK = 'link',
+    SELECT = 'select',
+}
