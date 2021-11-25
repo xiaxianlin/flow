@@ -1,9 +1,10 @@
+import { ElementEvent } from 'zrender'
 import { VertexStatus } from './constant/vertex'
 import { RenderType, TEvent, TStyle, TVertexButtonProp, TVertextShape } from './type'
 
 export interface IContainer {
     setActive(model: IVertexModel): void
-    setDragTarget(model: IVertexModel): void
+    setDragTarget(model: IVertexModel, evt: ElementEvent): void
 }
 
 export interface IGraph {
@@ -21,6 +22,9 @@ export interface IVertexModel extends IModel {
     setStatus(status: VertexStatus): void
     setButtons(buttons: TVertexButtonProp[]): void
     setShape(shape: TVertextShape): void
+
+    getShape(): TVertextShape
+
     add(child: IVertexModel): void
 }
 export interface IEdgeModel extends IModel {}
@@ -38,6 +42,7 @@ export interface IView {
 
     add(view: RenderType): void
     render(): RenderType
+    update(): void
 }
 export interface IProcessView extends IView {
     setInnerButtonStyle(style: TStyle): void

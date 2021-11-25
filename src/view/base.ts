@@ -1,7 +1,7 @@
 import { Circle, ElementEvent, Group, Path, Rect, Text } from 'zrender'
 import { C_RADIUS } from '../constant'
 import { VertexButtonType, VertexPropType } from '../constant/vertex'
-import { TAxis, TEvent, RenderType, TStyle, TVertexButtonProp, TVertextShape } from '../type'
+import { TPosition, TEvent, RenderType, TStyle, TVertexButtonProp, TVertextShape } from '../type'
 import { IModel, IView } from '../interface'
 import { generateConnectPoints } from '../logic/vertex'
 
@@ -110,21 +110,12 @@ class BaseView implements IView {
     }
 
     /**
-     * 添加子视图
-     * @param view 子视图
-     */
-    add(view: Group): void {
-        this.childViews.push(view)
-        this.view.add(view)
-    }
-
-    /**
      * 渲染连接点
      */
     renderConnectors() {
         let { border, background } = this.connectorStyle
-        let points: TAxis[] = generateConnectPoints(this.shape)
-        this.connectors = points.map((p: TAxis) => {
+        let points: TPosition[] = generateConnectPoints(this.shape)
+        this.connectors = points.map((p: TPosition) => {
             let [cx, cy] = p
             let c = new Circle({
                 shape: { cx, cy, r: C_RADIUS },
@@ -161,9 +152,20 @@ class BaseView implements IView {
         this.hideButtonLayer()
     }
 
+    /**
+     * 添加子视图
+     * @param view 子视图
+     */
+    add(view: Group): void {
+        this.childViews.push(view)
+        this.view.add(view)
+    }
+
     render() {
         return this.view
     }
+
+    update() {}
 }
 
 export default BaseView

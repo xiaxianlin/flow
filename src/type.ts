@@ -5,7 +5,7 @@ export type RenderType = Group
 
 export type RenderText = Text
 
-export type TAxis = [number, number]
+export type TPosition = [number, number]
 
 /**
  * 按钮

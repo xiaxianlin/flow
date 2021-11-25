@@ -2,7 +2,7 @@ import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
-import { RenderType, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { RenderType, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
 import { MoveType } from './constant/graph'
@@ -18,8 +18,10 @@ class Container implements IContainer {
     private graph: IGraph
     private layer: RenderType
     private active: IVertexModel
-    private dragTarget: IVertexModel
     private moveType: MoveType
+
+    private dragTarget: IVertexModel
+    private dragStartPosition: TPosition
 
     private handleClick(evt: ElementEvent) {
         if (!evt.target && !!this.active) {
@@ -29,9 +31,11 @@ class Container implements IContainer {
     }
 
     private handleDrop(evt: ElementEvent) {
-        console.log(evt)
         if (this.moveType === MoveType.DRAG) {
-            this.dragTarget.setShape({ x: evt.offsetX, y: evt.offsetY })
+            let ox = evt.offsetX - this.dragStartPosition[0]
+            let oy = evt.offsetY - this.dragStartPosition[1]
+            let { x, y } = this.dragTarget.getShape()
+            this.dragTarget.setShape({ x: x + ox, y: y + oy })
         }
 
         this.moveType = null
@@ -57,9 +61,10 @@ class Container implements IContainer {
         this.active = model
     }
 
-    setDragTarget(model: IVertexModel): void {
+    setDragTarget(model: IVertexModel, evt: ElementEvent): void {
         this.moveType = MoveType.DRAG
         this.dragTarget = model
+        this.dragStartPosition = [evt.offsetX, evt.offsetY]
     }
 
     /**
@@ -108,6 +113,7 @@ class Container implements IContainer {
             i.setButtons(buttons)
         }
         v.add(i)
+        console.log(i.id)
         return i.id
     }
 

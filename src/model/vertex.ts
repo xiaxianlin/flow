@@ -2,7 +2,7 @@ import { ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
-import { RenderType, TStyle, TTheme, TVertexButtonProp, TVertextShape } from '../type'
+import { RenderType, TPosition, TStyle, TTheme, TVertexButtonProp, TVertextShape } from '../type'
 import ConfluenceView from '../view/confluence'
 import EventView from '../view/event'
 import GroupView from '../view/group'
@@ -11,10 +11,10 @@ import ProcessView from '../view/process'
 import BaseModel from './base'
 
 class VertexModel extends BaseModel implements IVertexModel {
+    isGroup: boolean = false
     private status: VertexStatus
     private shape: TVertextShape
     private children: IVertexModel[] = []
-    public isGroup: boolean = false
 
     private handleClick() {
         if (this.status === VertexStatus.ACTIVE) return
@@ -25,7 +25,7 @@ class VertexModel extends BaseModel implements IVertexModel {
     }
 
     private handleDragStart(evt: ElementEvent) {
-        this.contaienr.setDragTarget(this)
+        this.contaienr.setDragTarget(this, evt)
     }
 
     private viewFactory(type: VertexType): IView {
@@ -103,19 +103,25 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.view.setShape(this.shape)
     }
 
+    getShape(): TVertextShape {
+        return this.shape
+    }
+
     add(child: IVertexModel) {
         if (!this.isGroup || child.isGroup) return
         // 设置子节点位置
         let y = child.setShape({
-            x: 3,
-            y: (G_ITEM_HEIGHT + G_PADDING) * this.children.length + G_HEAD_HEIGHT + G_PADDING,
+            x: G_PADDING + 1,
+            y: (G_ITEM_HEIGHT + G_PADDING) * this.children.length + G_HEAD_HEIGHT + G_PADDING + 1,
+            width: G_WIDTH - G_PADDING * 2 - 2,
         })
         this.children.push(child)
+        this.view.add(child.render())
 
         // 更新分组高度
         // 高度：header高度 + item高度*item个数 + border宽度 + padding宽度
         this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 })
-        this.view.add(child.render())
+        this.view.update()
     }
 
     render(): RenderType {

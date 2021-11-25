@@ -1,9 +1,9 @@
-import { Group, Rect, Text } from 'zrender'
+import { Circle, Group, Rect, Text } from 'zrender'
 import { G_HEAD_HEIGHT, G_WIDTH, V_RADIUS } from '../constant'
 import { VertexButtonType } from '../constant/vertex'
 import { IGroupView, IVertexModel } from '../interface'
-import { cutText } from '../logic/vertex'
-import { TStyle, TVertexButtonProp, TVertextShape } from '../type'
+import { cutText, generateConnectPoints } from '../logic/vertex'
+import { TPosition, TStyle, TVertexButtonProp, TVertextShape } from '../type'
 import BaseView from './base'
 
 class GroupView extends BaseView implements IGroupView {
@@ -86,9 +86,24 @@ class GroupView extends BaseView implements IGroupView {
         this.renderBackground()
         this.renderHeader()
         this.renderGroupButtons()
-        this.renderConnectors()
         this.renderOuterButtons()
+        this.renderConnectors()
         return this.view
+    }
+
+    update() {
+        let { height } = this.shape
+        this.background.attr({ shape: { height: height } })
+
+        let buttons: TVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.OUTER)
+        if (buttons.length) {
+            this.buttonLayer.attr({ y: (height - buttons.length * 30 + 10) / 2 })
+        }
+
+        let points: TPosition[] = generateConnectPoints(this.shape)
+        this.connectors.forEach((c: Circle, i: number) => {
+            c.attr({ shape: { cx: points[i][0], cy: points[i][1] } })
+        })
     }
 }
 
