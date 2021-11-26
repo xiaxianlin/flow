@@ -1,4 +1,5 @@
 import { Text, Group } from 'zrender'
+import { GraphEvent } from './constant/graph'
 import { VertexButtonType } from './constant/vertex'
 
 export type RenderType = Group
@@ -21,6 +22,10 @@ export type TButton = {
 export type TEvent = {
     name: string
     handler: (...args: any[]) => void
+}
+
+export type TEvents = {
+    [key in GraphEvent]?: (...args: any[]) => void
 }
 
 /**

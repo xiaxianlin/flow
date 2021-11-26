@@ -15,6 +15,7 @@ class VertexModel extends BaseModel implements IVertexModel {
     private status: VertexStatus
     private shape: TVertextShape
     private children: IVertexModel[] = []
+    private group: IVertexModel
 
     private handleClick() {
         if (this.status === VertexStatus.ACTIVE) return
@@ -103,6 +104,10 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.view.setShape(this.shape)
     }
 
+    setGroup(group: IVertexModel): void {
+        this.group = group
+    }
+
     getShape(): TVertextShape {
         return this.shape
     }
@@ -120,7 +125,7 @@ class VertexModel extends BaseModel implements IVertexModel {
 
         // 更新分组高度
         // 高度：header高度 + item高度*item个数 + border宽度 + padding宽度
-        this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 })
+        this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 - G_PADDING })
         this.view.update()
     }
 

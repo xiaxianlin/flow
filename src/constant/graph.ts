@@ -12,3 +12,10 @@ export const enum MoveType {
     LINK = 'link',
     SELECT = 'select',
 }
+
+export const enum GraphEvent {
+    CLICK = 'click',
+    DBCLICK = 'dbclick',
+    INGROUP = 'ingroup',
+    OUTGROUP = 'outgroup',
+}

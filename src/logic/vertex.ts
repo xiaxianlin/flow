@@ -1,11 +1,12 @@
 import { V_WIDTH } from '../constant'
+import { IVertexModel } from '../interface'
 import { TPosition, TVertextShape } from '../type'
 
 /**
  * 生成顶点的连接点
  * @param attr 顶点属性
  * @returns 四个连点的位置，[上，右，下，左]
- */ 
+ */
 
 export function generateConnectPoints(attr: TVertextShape): TPosition[] {
     let { width, height } = attr

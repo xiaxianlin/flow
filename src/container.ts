@@ -2,10 +2,10 @@ import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
-import { RenderType, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { RenderType, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
-import VertexModel from './model/Vertex'
-import { MoveType } from './constant/graph'
+import VertexModel from './entity/Vertex'
+import { GraphEvent, MoveType } from './constant/graph'
 
 class Container implements IContainer {
     static createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
@@ -113,11 +113,15 @@ class Container implements IContainer {
             i.setButtons(buttons)
         }
         v.add(i)
-        console.log(i.id)
+        i.setGroup(v)
         return i.id
     }
 
-    update(id: string) {}
+    update(id: string) {
+        this.on({ click: () => {} })
+    }
+
+    on(events: TEvents): void {}
 }
 
 export default Container

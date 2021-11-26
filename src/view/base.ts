@@ -1,9 +1,10 @@
-import { Circle, ElementEvent, Group, Path, Rect, Text } from 'zrender'
+import { Circle, Displayable, ElementEvent, Group, Path, Rect, Text } from 'zrender'
 import { C_RADIUS } from '../constant'
 import { VertexButtonType, VertexPropType } from '../constant/vertex'
 import { TPosition, TEvent, RenderType, TStyle, TVertexButtonProp, TVertextShape } from '../type'
 import { IModel, IView } from '../interface'
 import { generateConnectPoints } from '../logic/vertex'
+import { setVertexZ } from '../logic/view'
 
 class BaseView implements IView {
     protected model: IModel
@@ -45,7 +46,15 @@ class BaseView implements IView {
     }
 
     protected handleDragStart(evt: ElementEvent) {
+        setVertexZ(this.view, 1)
         let event = this.events.find((e) => e.name === 'dragstart')
+        if (!event) return
+        evt.cancelBubble = true
+        event.handler(evt)
+    }
+    protected handleDragEnd(evt: ElementEvent) {
+        setVertexZ(this.view, 0)
+        let event = this.events.find((e) => e.name === 'dragend')
         if (!event) return
         evt.cancelBubble = true
         event.handler(evt)
@@ -57,6 +66,7 @@ class BaseView implements IView {
         this.view.on('click', (evt) => this.handleClick(evt))
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
         this.view.on('dragstart', (evt) => this.handleDragStart(evt))
+        this.view.on('dragend', (evt) => this.handleDragEnd(evt))
     }
 
     constructor(shape: TVertextShape, style: TStyle, buttonStyle: TStyle, connectorStyle: TStyle) {

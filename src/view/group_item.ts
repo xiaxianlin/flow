@@ -12,6 +12,8 @@ class GroupItemView extends BaseView implements IGroupItemView {
     protected initEvents() {
         this.view.on('click', (evt) => this.handleClick(evt))
         this.view.on('dbclick', (evt) => this.handleDBClick(evt))
+        this.view.on('dragstart', (evt) => this.handleDragStart(evt))
+        this.view.on('dragend', (evt) => this.handleDragEnd(evt))
     }
 
     setInnerButtonStyle(style: TStyle): void {
