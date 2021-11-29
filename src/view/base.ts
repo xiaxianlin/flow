@@ -107,6 +107,10 @@ class BaseView implements IView {
         this.buttonStyle = style
     }
 
+    getView(): RenderType {
+        return this.view
+    }
+
     showButtonLayer() {
         if (this.buttonLayer) {
             this.buttonLayer.show()

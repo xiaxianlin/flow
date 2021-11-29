@@ -31,11 +31,26 @@ class Container implements IContainer {
     }
 
     private handleDrop(evt: ElementEvent) {
+        let { offsetX, offsetY } = evt
         if (this.moveType === MoveType.DRAG) {
-            let ox = evt.offsetX - this.dragStartPosition[0]
-            let oy = evt.offsetY - this.dragStartPosition[1]
+            let [sx, sy] = this.dragStartPosition
+
+            // 更新元素位置
             let { x, y } = this.dragTarget.getShape()
-            this.dragTarget.setShape({ x: x + ox, y: y + oy })
+            this.dragTarget.setShape({ x: x + offsetX - sx, y: y + offsetY - sy })
+
+            // 分组子元素
+            let group = this.dragTarget.getGroup()
+            if (group) {
+                console.log(this.dragTarget)
+                // group.remove(this.dragTarget)
+                let inView = this.dragTarget.inView()
+                // 如果还在内部，则恢复原始位置
+                if (inView) {
+                    this.dragTarget.setShape({ x, y })
+                }
+                console.log(inView)
+            }
         }
 
         this.moveType = null

@@ -46,3 +46,11 @@ export function cutText(text: string, fontSize: number, max = V_WIDTH): string[]
     }
     return result
 }
+
+export function parentContainChild(ps: TVertextShape, cs: TVertextShape): boolean {
+    let x1 = cs.x,
+        x2 = cs.x + cs.width,
+        y1 = cs.y,
+        y2 = cs.y + cs.height
+    return !(x1 > ps.width || x2 < 0 || y1 > ps.height || y2 < 0)
+}

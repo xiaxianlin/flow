@@ -2,6 +2,7 @@ import { ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
+import { parentContainChild } from '../logic/vertex'
 import { RenderType, TPosition, TStyle, TTheme, TVertexButtonProp, TVertextShape } from '../type'
 import ConfluenceView from '../view/confluence'
 import EventView from '../view/event'
@@ -112,7 +113,15 @@ class VertexModel extends BaseModel implements IVertexModel {
         return this.shape
     }
 
-    add(child: IVertexModel) {
+    getGroup(): IVertexModel {
+        return this.group
+    }
+
+    getView(): RenderType {
+        return this.view.getView()
+    }
+
+    add(child: IVertexModel): void {
         if (!this.isGroup || child.isGroup) return
         // 设置子节点位置
         let y = child.setShape({
@@ -127,6 +136,16 @@ class VertexModel extends BaseModel implements IVertexModel {
         // 高度：header高度 + item高度*item个数 + border宽度 + padding宽度
         this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 - G_PADDING })
         this.view.update()
+    }
+
+    remove(child: IVertexModel): void {
+        if (!this.isGroup || child.isGroup) return
+    }
+
+    inView(): boolean {
+        let cShape = this.shape
+        let pShape = this.group.getShape()
+        return parentContainChild(pShape, cShape)
     }
 
     render(): RenderType {

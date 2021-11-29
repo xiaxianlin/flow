@@ -20,13 +20,23 @@ export interface IModel {
 export interface IVertexModel extends IModel {
     id: string
     isGroup: boolean
+
     setStatus(status: VertexStatus): void
     setButtons(buttons: TVertexButtonProp[]): void
     setShape(shape: TVertextShape): void
     setGroup(group: IVertexModel): void
 
     getShape(): TVertextShape
+    getGroup(): IVertexModel
+    getView(): RenderType
+
     add(child: IVertexModel): void
+    remove(child: IVertexModel): void
+
+    /**
+     * 判断元素是否在父元素视图内
+     */
+    inView(): boolean
 }
 export interface IEdgeModel extends IModel {}
 
@@ -37,6 +47,8 @@ export interface IView {
     setButtonStyle(style: TStyle): void
     setEvents(events: TEvent[]): void
     setButtons(buttons: TVertexButtonProp[]): void
+
+    getView(): RenderType
 
     showButtonLayer(): void
     hideButtonLayer(): void
