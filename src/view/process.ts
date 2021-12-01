@@ -61,6 +61,10 @@ class ProcessView extends BaseView implements IProcessView {
         this.renderOuterButtons()
         return this.view
     }
+
+    update() {
+        this.render()
+    }
 }
 
 export default ProcessView

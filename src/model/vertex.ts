@@ -30,6 +30,28 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.contaienr.setDragTarget(this, evt)
     }
 
+    /**
+     * 更新分组高度
+     */
+    private updateGroupHeigt() {
+        // 高度：header高度 + item高度*item个数 + border宽度 + padding宽度
+        if (this.children.length > 0) {
+            this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 - G_PADDING })
+        } else {
+            this.setShape({ height: G_HEIGHT })
+        }
+        this.view.update()
+    }
+
+    private updateGroupItemPosition(v: IVertexModel, i: number) {
+        v.setShape({ x: G_PADDING + 1, y: (G_ITEM_HEIGHT + G_PADDING) * i + G_HEAD_HEIGHT + G_PADDING + 1 })
+    }
+
+    /**
+     * 视图工厂
+     * @param type 视图类型
+     * @returns 视图
+     */
     private viewFactory(type: VertexType): IView {
         let { vertex, vertexButton, vertexConnector } = this.theme
         let baseArgs: [TVertextShape, TStyle, TStyle, TStyle] = [this.shape, vertex, vertexButton, vertexConnector]
@@ -57,12 +79,7 @@ class VertexModel extends BaseModel implements IVertexModel {
         return view
     }
 
-    constructor(type: VertexType, shape: TVertextShape = {}, theme: TTheme) {
-        super()
-        this.shape = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, shape)
-        this.theme = theme
-        this.status = VertexStatus.NONE
-        this.isGroup = type === VertexType.GROUP
+    private init(type: VertexType) {
         // 设置事件顶点宽度
         if (type === VertexType.EVENT || type === VertexType.CONFLUENCE) {
             this.shape.width = V_HEIGHT
@@ -88,6 +105,15 @@ class VertexModel extends BaseModel implements IVertexModel {
         }
     }
 
+    constructor(type: VertexType, shape: TVertextShape = {}, theme: TTheme) {
+        super()
+        this.shape = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, shape)
+        this.theme = theme
+        this.status = VertexStatus.NONE
+        this.isGroup = type === VertexType.GROUP
+        this.init(type)
+    }
+
     setStatus(status: VertexStatus) {
         this.status = status
         if (status === VertexStatus.NONE) {
@@ -109,6 +135,14 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.group = group
     }
 
+    setType(type: VertexType): void {
+        let buttons = this.view.getButtons()
+        // 重新初始化视图信息
+        this.init(type)
+        this.view.setButtons(buttons)
+        this.view.update()
+    }
+
     getShape(): TVertextShape {
         return this.shape
     }
@@ -123,24 +157,24 @@ class VertexModel extends BaseModel implements IVertexModel {
 
     add(child: IVertexModel): void {
         if (!this.isGroup || child.isGroup) return
-        // 设置子节点位置
-        let y = child.setShape({
-            x: G_PADDING + 1,
-            y: (G_ITEM_HEIGHT + G_PADDING) * this.children.length + G_HEAD_HEIGHT + G_PADDING + 1,
-            width: G_WIDTH - G_PADDING * 2 - 2,
-        })
-        this.children.push(child)
+
+        let i = this.children.push(child)
         this.view.add(child.render())
 
-        // 更新分组高度
-        // 高度：header高度 + item高度*item个数 + border宽度 + padding宽度
-        this.setShape({ height: G_HEAD_HEIGHT + (G_ITEM_HEIGHT + G_PADDING) * this.children.length + 2 + G_PADDING * 2 - G_PADDING })
-        this.view.update()
+        this.updateGroupHeigt()
+        this.updateGroupItemPosition(child, i - 1)
     }
 
     remove(child: IVertexModel): void {
         if (!this.isGroup || child.isGroup) return
+
+        // 删除视图
         this.view.remove(child.getView())
+        // 删除元素
+        this.children = this.children.filter((v) => v !== child)
+
+        this.updateGroupHeigt()
+        this.children.forEach((v, i) => this.updateGroupItemPosition(v, i))
     }
 
     inView(): boolean {

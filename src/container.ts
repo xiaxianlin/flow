@@ -1,5 +1,5 @@
 import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
-import { DEFAULT_THEME } from './constant'
+import { DEFAULT_THEME, V_HEIGHT, V_WIDTH } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
 import { RenderType, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
@@ -23,6 +23,37 @@ class Container implements IContainer {
     private dragTarget: IVertexModel
     private dragStartPosition: TPosition
 
+    /**
+     * 子元素出组
+     * @param origin 元素初始位置
+     */
+    private outGroup(origin: TPosition) {
+        // 分组子元素
+        let group = this.dragTarget.getGroup()
+        if (!group) return
+
+        let inView = this.dragTarget.inView()
+        // 如果还在内部，则恢复原始位置
+        if (inView) {
+            let [x, y] = origin
+            this.dragTarget.setShape({ x, y })
+        } else {
+            let gshape = group.getShape()
+            let cshape = this.dragTarget.getShape()
+            group.remove(this.dragTarget)
+            // 修改为普通元素
+            this.dragTarget.setShape({ ...cshape, x: gshape.x + cshape.x, y: gshape.y + cshape.y, width: V_WIDTH, height: V_HEIGHT })
+            this.dragTarget.setGroup(null)
+            this.dragTarget.setType(VertexType.PROCESS)
+            // 入图
+            this.graph.addVertex(this.dragTarget)
+            // 渲染视图
+            this.layer.add(this.dragTarget.render())
+        }
+    }
+
+    private inGroup() {}
+
     private handleClick(evt: ElementEvent) {
         if (!evt.target && !!this.active) {
             this.active.setStatus(VertexStatus.NONE)
@@ -39,19 +70,7 @@ class Container implements IContainer {
             let { x, y } = this.dragTarget.getShape()
             this.dragTarget.setShape({ x: x + offsetX - sx, y: y + offsetY - sy })
 
-            // 分组子元素
-            let group = this.dragTarget.getGroup()
-            if (group) {
-                console.log(this.dragTarget)
-                let inView = this.dragTarget.inView()
-                // 如果还在内部，则恢复原始位置
-                if (inView) {
-                    this.dragTarget.setShape({ x, y })
-                } else {
-                    group.remove(this.dragTarget)
-                }
-                console.log(inView)
-            }
+            this.outGroup([x, y])
         }
 
         this.moveType = null

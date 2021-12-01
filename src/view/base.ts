@@ -111,6 +111,10 @@ class BaseView implements IView {
         return this.view
     }
 
+    getButtons(): TVertexButtonProp[] {
+        return this.buttons
+    }
+
     showButtonLayer() {
         if (this.buttonLayer) {
             this.buttonLayer.show()

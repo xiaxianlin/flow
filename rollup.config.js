@@ -21,6 +21,12 @@ const config = {
             contentBase: ['demo', 'lib'],
         }),
     ],
+    watch: {
+        chokidar: {
+            usePolling: true,
+        },
+        include: 'src/**',
+    },
 }
 
 export default config

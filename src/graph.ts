@@ -1,4 +1,4 @@
-import { IGraph } from './interface'
+import { IEdgeModel, IGraph, IVertexModel } from './interface'
 import EdgeModel from './model/edge'
 import VertexModel from './model/Vertex'
 
@@ -13,11 +13,22 @@ class Graph implements IGraph {
         this.vertices.set(v.id, v)
     }
 
+    removeVertex(v: IVertexModel): void {
+        throw new Error('Method not implemented.')
+    }
+
     getVertex(id: string) {
         return this.vertices.get(id)
     }
 
     addEdge(e: EdgeModel) {}
+
+    removeEdge(e: IEdgeModel): void {
+        throw new Error('Method not implemented.')
+    }
+    getEdge(id: string): IEdgeModel {
+        throw new Error('Method not implemented.')
+    }
 }
 
 export default Graph

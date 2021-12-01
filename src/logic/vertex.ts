@@ -47,6 +47,12 @@ export function cutText(text: string, fontSize: number, max = V_WIDTH): string[]
     return result
 }
 
+/**
+ * 子元素是否在父元素范围内
+ * @param ps 父元素的图形信息
+ * @param cs 子元素的图形信息
+ * @returns boolean
+ */
 export function parentContainChild(ps: TVertextShape, cs: TVertextShape): boolean {
     let x1 = cs.x,
         x2 = cs.x + cs.width,
