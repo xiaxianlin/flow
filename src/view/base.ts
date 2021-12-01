@@ -166,13 +166,14 @@ class BaseView implements IView {
         this.hideButtonLayer()
     }
 
-    /**
-     * 添加子视图
-     * @param view 子视图
-     */
     add(view: Group): void {
         this.childViews.push(view)
         this.view.add(view)
+    }
+
+    remove(view: Group): void {
+        this.childViews = this.childViews.filter((v) => v !== view)
+        this.view.remove(view)
     }
 
     render() {

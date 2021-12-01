@@ -4,7 +4,7 @@ import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
 import { RenderType, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
-import VertexModel from './entity/Vertex'
+import VertexModel from './model/Vertex'
 import { GraphEvent, MoveType } from './constant/graph'
 
 class Container implements IContainer {
@@ -43,11 +43,12 @@ class Container implements IContainer {
             let group = this.dragTarget.getGroup()
             if (group) {
                 console.log(this.dragTarget)
-                // group.remove(this.dragTarget)
                 let inView = this.dragTarget.inView()
                 // 如果还在内部，则恢复原始位置
                 if (inView) {
                     this.dragTarget.setShape({ x, y })
+                } else {
+                    group.remove(this.dragTarget)
                 }
                 console.log(inView)
             }
@@ -82,22 +83,10 @@ class Container implements IContainer {
         this.dragStartPosition = [evt.offsetX, evt.offsetY]
     }
 
-    /**
-     * 设置主题颜色
-     * @param theme 主题配置
-     */
-    settingTheme(theme: TTheme) {
+    settingTheme(theme: TTheme): void {
         this.theme = theme
     }
 
-    /**
-     * 添加一个顶点
-     *
-     * @param type 顶点类型
-     * @param subType 顶点子类型
-     * @param shape 顶点属性
-     * @returns 顶点ID
-     */
     addVertex(type: VertexType, shape?: TVertextShape, buttons?: TVertexButtonProp[]): string {
         let v: IVertexModel = new VertexModel(type, shape, this.theme)
         v.setContainer(this)
@@ -111,14 +100,6 @@ class Container implements IContainer {
         return v.id
     }
 
-    /**
-     * 给分组添加一个子元素
-     *
-     * @param id 分组id
-     * @param shape 图形信息
-     * @param buttons 按钮信息
-     * @returns 子元素id
-     */
     addGroupItem(id: string, shape?: TVertextShape, buttons?: TVertexButtonProp[]) {
         let v = this.graph.getVertex(id)
         if (!v.isGroup) return
@@ -130,10 +111,6 @@ class Container implements IContainer {
         v.add(i)
         i.setGroup(v)
         return i.id
-    }
-
-    update(id: string) {
-        this.on({ click: () => {} })
     }
 
     on(events: TEvents): void {}

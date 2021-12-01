@@ -1,6 +1,6 @@
 import { IGraph } from './interface'
-import EdgeModel from './entity/edge'
-import VertexModel from './entity/Vertex'
+import EdgeModel from './model/edge'
+import VertexModel from './model/Vertex'
 
 class Graph implements IGraph {
     private x: number = 0

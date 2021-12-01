@@ -140,6 +140,7 @@ class VertexModel extends BaseModel implements IVertexModel {
 
     remove(child: IVertexModel): void {
         if (!this.isGroup || child.isGroup) return
+        this.view.remove(child.getView())
     }
 
     inView(): boolean {
