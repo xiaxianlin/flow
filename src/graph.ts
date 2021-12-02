@@ -29,6 +29,12 @@ class Graph implements IGraph {
     getEdge(id: string): IEdgeModel {
         throw new Error('Method not implemented.')
     }
+
+    allVertices(): IVertexModel[] {
+        let vs: IVertexModel[] = []
+        this.vertices.forEach((v) => vs.push(v))
+        return vs
+    }
 }
 
 export default Graph

@@ -8,6 +8,14 @@ import VertexModel from './model/Vertex'
 import { GraphEvent, MoveType } from './constant/graph'
 
 class Container implements IContainer {
+    /**
+     * 生成图标
+     * @param fontFamily 字体
+     * @param text 内容
+     * @param x x轴
+     * @param y y轴
+     * @returns 返回图标视图
+     */
     static createIcon(fontFamily: string, text: string, x: number = 12, y: number = 12): Text {
         let icon = new Text({ style: { fontFamily, text, x, y, align: 'center', verticalAlign: 'middle', fontSize: 16 } })
         return icon
@@ -62,6 +70,7 @@ class Container implements IContainer {
     }
 
     private handleDrop(evt: ElementEvent) {
+        console.log(evt)
         let { offsetX, offsetY } = evt
         if (this.moveType === MoveType.DRAG) {
             let [sx, sy] = this.dragStartPosition
@@ -69,7 +78,8 @@ class Container implements IContainer {
             // 更新元素位置
             let { x, y } = this.dragTarget.getShape()
             this.dragTarget.setShape({ x: x + offsetX - sx, y: y + offsetY - sy })
-
+            // 入组和出组都是在方法里面判断
+            this.inGroup()
             this.outGroup([x, y])
         }
 
@@ -100,6 +110,11 @@ class Container implements IContainer {
         this.moveType = MoveType.DRAG
         this.dragTarget = model
         this.dragStartPosition = [evt.offsetX, evt.offsetY]
+        // 降低其他元素层级
+        this.graph
+            .allVertices()
+            .filter((v) => v !== model)
+            .forEach((v) => v.setZ(0))
     }
 
     settingTheme(theme: TTheme): void {

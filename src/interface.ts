@@ -30,9 +30,10 @@ export interface IGraph {
     removeEdge(e: IEdgeModel): void
     /**
      * 获取边
-     * @param id
      */
     getEdge(id: string): IEdgeModel
+
+    allVertices(): IVertexModel[]
 }
 
 export interface IContainer {
@@ -116,6 +117,11 @@ export interface IVertexModel extends IModel {
      */
     setType(type: VertexType): void
     /**
+     * 设置z值
+     * @param z 层级
+     */
+    setZ(z: number): void
+    /**
      * 获取顶点的shape信息
      */
     getShape(): TVertextShape
@@ -176,6 +182,11 @@ export interface IView {
      * @param style 样式信息
      */
     setButtonStyle(style: TStyle): void
+    /**
+     * 设置z值
+     * @param z 层级
+     */
+    setZ(z: number): void
     /**
      * 获取视图
      */

@@ -23,41 +23,38 @@ class BaseView implements IView {
     protected buttonLayer: Group // 按钮层
     protected childViews: Group[]
 
+    protected handleEvent(name: string, evt: ElementEvent, cancelBubble: boolean = true) {
+        let event = this.events.find((e) => e.name === name)
+        if (!event) return
+        evt.cancelBubble = cancelBubble
+        event.handler(evt)
+    }
+
     protected handleMouseOver(evt: ElementEvent) {
         this.connectors.forEach((c) => c.attr('style', { opacity: 1 }))
+        this.handleEvent('mouseover', evt)
     }
 
     protected handleMouseLeave(evt: ElementEvent) {
         this.connectors.forEach((c) => c.attr('style', { opacity: 0 }))
+        this.handleEvent('mouseleave', evt)
     }
 
     protected handleClick(evt: ElementEvent) {
-        let event = this.events.find((e) => e.name === 'click')
-        if (!event) return
-        evt.cancelBubble = true
-        event.handler(evt)
+        this.handleEvent('click', evt)
     }
 
     protected handleDBClick(evt: ElementEvent) {
-        let event = this.events.find((e) => e.name === 'dbclick')
-        if (!event) return
-        evt.cancelBubble = true
-        event.handler(evt)
+        this.handleEvent('dbclick', evt)
     }
 
     protected handleDragStart(evt: ElementEvent) {
         setVertexZ(this.view, 1)
-        let event = this.events.find((e) => e.name === 'dragstart')
-        if (!event) return
-        evt.cancelBubble = true
-        event.handler(evt)
+        this.handleEvent('dragstart', evt)
     }
+
     protected handleDragEnd(evt: ElementEvent) {
-        setVertexZ(this.view, 0)
-        let event = this.events.find((e) => e.name === 'dragend')
-        if (!event) return
-        evt.cancelBubble = true
-        event.handler(evt)
+        this.handleEvent('dragend', evt)
     }
 
     protected initEvents() {
@@ -107,6 +104,10 @@ class BaseView implements IView {
         this.buttonStyle = style
     }
 
+    setZ(z: number): void {
+        setVertexZ(this.view, z)
+    }
+
     getView(): RenderType {
         return this.view
     }
@@ -127,9 +128,6 @@ class BaseView implements IView {
         }
     }
 
-    /**
-     * 渲染连接点
-     */
     renderConnectors() {
         let { border, background } = this.connectorStyle
         let points: TPosition[] = generateConnectPoints(this.shape)
@@ -145,9 +143,6 @@ class BaseView implements IView {
         })
     }
 
-    /**
-     * 渲染外部按钮
-     */
     renderOuterButtons() {
         let buttons: TVertexButtonProp[] = this.buttons.filter((b) => b.type === VertexButtonType.OUTER)
         if (!buttons.length) return

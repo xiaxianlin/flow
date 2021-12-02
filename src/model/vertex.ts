@@ -143,6 +143,10 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.view.update()
     }
 
+    setZ(z: number): void {
+        this.view.setZ(z)
+    }
+
     getShape(): TVertextShape {
         return this.shape
     }
