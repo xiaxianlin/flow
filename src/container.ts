@@ -6,6 +6,7 @@ import { RenderType, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShap
 import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
 import { GraphEvent, MoveType } from './constant/graph'
+import { getCoveredVertices } from './logic/vertex'
 
 class Container implements IContainer {
     /**
@@ -60,7 +61,17 @@ class Container implements IContainer {
         }
     }
 
-    private inGroup() {}
+    private inGroup() {
+        if (this.dragTarget.type !== VertexType.PROCESS) return
+
+        let shape = this.dragTarget.getBoundingRect()
+        let vertices = this.graph.allVertices().filter((v) => v !== this.dragTarget)
+        let coveredGroups = getCoveredVertices(shape, vertices).filter((v) => v.type === VertexType.GROUP)
+        if (coveredGroups.length === 0) return
+
+        let group = coveredGroups[0]
+        console.log(group)
+    }
 
     private handleClick(evt: ElementEvent) {
         if (!evt.target && !!this.active) {
@@ -70,7 +81,6 @@ class Container implements IContainer {
     }
 
     private handleDrop(evt: ElementEvent) {
-        console.log(evt)
         let { offsetX, offsetY } = evt
         if (this.moveType === MoveType.DRAG) {
             let [sx, sy] = this.dragStartPosition

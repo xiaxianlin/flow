@@ -1,6 +1,7 @@
+import { BoundingRect } from 'zrender'
 import { V_WIDTH } from '../constant'
 import { IVertexModel } from '../interface'
-import { TPosition, TVertextShape } from '../type'
+import { RenderType, TPosition, TVertextShape } from '../type'
 
 /**
  * 生成顶点的连接点
@@ -59,4 +60,20 @@ export function parentContainChild(ps: TVertextShape, cs: TVertextShape): boolea
         y1 = cs.y,
         y2 = cs.y + cs.height
     return !(x1 > ps.width || x2 < 0 || y1 > ps.height || y2 < 0)
+}
+
+/**
+ * 获取被覆盖的顶点
+ * @param BoundingRect 包围盒
+ * @param bgVertices 背景顶点
+ */
+export function getCoveredVertices(br: BoundingRect, bgVertices: IVertexModel[]) {
+    let vBoundingRects = bgVertices.map((v) => v.getBoundingRect())
+    let indices: number[] = []
+    vBoundingRects.forEach((vb, i) => {
+        if (br.intersect(vb)) {
+            indices.push(i)
+        }
+    })
+    return indices.map((i) => bgVertices[i])
 }

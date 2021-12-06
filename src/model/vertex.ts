@@ -1,4 +1,4 @@
-import { ElementEvent } from 'zrender'
+import { BoundingRect, ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
@@ -12,6 +12,7 @@ import ProcessView from '../view/process'
 import BaseModel from './base'
 
 class VertexModel extends BaseModel implements IVertexModel {
+    type: VertexType
     isGroup: boolean = false
     private status: VertexStatus
     private shape: TVertextShape
@@ -107,6 +108,7 @@ class VertexModel extends BaseModel implements IVertexModel {
 
     constructor(type: VertexType, shape: TVertextShape = {}, theme: TTheme) {
         super()
+        this.type = type
         this.shape = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, shape)
         this.theme = theme
         this.status = VertexStatus.NONE
@@ -157,6 +159,11 @@ class VertexModel extends BaseModel implements IVertexModel {
 
     getView(): RenderType {
         return this.view.getView()
+    }
+
+    getBoundingRect(): BoundingRect {
+        let { x, y, width, height } = this.shape
+        return new BoundingRect(x, y, width, height)
     }
 
     add(child: IVertexModel): void {
