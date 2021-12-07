@@ -3,36 +3,12 @@ import { VertexStatus, VertexType } from './constant/vertex'
 import { RenderType, TEvent, TEvents, TStyle, TTheme, TVertexButtonProp, TVertextShape } from './type'
 
 export interface IGraph {
-    /**
-     * 入图
-     * @param v 顶点模型
-     */
     addVertex(v: IVertexModel): void
-    /**
-     * 出图
-     * @param v 顶点模型
-     */
     removeVertex(v: IVertexModel): void
-    /**
-     * 获取顶点模型
-     * @param id
-     */
     getVertex(id: string): IVertexModel
-    /**
-     * 添加边
-     * @param e 边模型
-     */
     addEdge(e: IEdgeModel): void
-    /**
-     * 删除边
-     * @param e 边模型
-     */
     removeEdge(e: IEdgeModel): void
-    /**
-     * 获取边
-     */
     getEdge(id: string): IEdgeModel
-
     allVertices(): IVertexModel[]
 }
 

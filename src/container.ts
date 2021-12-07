@@ -39,7 +39,7 @@ class Container implements IContainer {
     private outGroup(origin: TPosition) {
         // 分组子元素
         let group = this.dragTarget.getGroup()
-        if (!group) return
+        if (!group) return false
 
         let inView = this.dragTarget.inView()
         // 如果还在内部，则恢复原始位置
@@ -59,18 +59,28 @@ class Container implements IContainer {
             // 渲染视图
             this.layer.add(this.dragTarget.render())
         }
+        return true
     }
 
     private inGroup() {
-        if (this.dragTarget.type !== VertexType.PROCESS) return
+        if (this.dragTarget.type !== VertexType.PROCESS) return false
+        if (!this.dragTarget.getShape().groupable) return false
 
         let shape = this.dragTarget.getBoundingRect()
         let vertices = this.graph.allVertices().filter((v) => v !== this.dragTarget)
         let coveredGroups = getCoveredVertices(shape, vertices).filter((v) => v.type === VertexType.GROUP)
-        if (coveredGroups.length === 0) return
+        if (coveredGroups.length === 0) return false
 
+        // 从外层移除
+        this.graph.removeVertex(this.dragTarget)
+        this.layer.remove(this.dragTarget.getView())
+
+        // 移动进组
         let group = coveredGroups[0]
-        console.log(group)
+        this.dragTarget.setGroup(group)
+        this.dragTarget.setType(VertexType.GROUP_ITEM)
+        group.add(this.dragTarget)
+        return true
     }
 
     private handleClick(evt: ElementEvent) {
@@ -89,8 +99,8 @@ class Container implements IContainer {
             let { x, y } = this.dragTarget.getShape()
             this.dragTarget.setShape({ x: x + offsetX - sx, y: y + offsetY - sy })
             // 入组和出组都是在方法里面判断
-            this.inGroup()
             this.outGroup([x, y])
+            this.inGroup()
         }
 
         this.moveType = null
@@ -120,10 +130,16 @@ class Container implements IContainer {
         this.moveType = MoveType.DRAG
         this.dragTarget = model
         this.dragStartPosition = [evt.offsetX, evt.offsetY]
+
+        let fitlerModel = model
+        if (this.dragTarget.getGroup()) {
+            fitlerModel = this.dragTarget.getGroup()
+        }
+        fitlerModel.setZ(1)
         // 降低其他元素层级
         this.graph
             .allVertices()
-            .filter((v) => v !== model)
+            .filter((v) => v !== fitlerModel)
             .forEach((v) => v.setZ(0))
     }
 

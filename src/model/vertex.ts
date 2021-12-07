@@ -94,6 +94,7 @@ class VertexModel extends BaseModel implements IVertexModel {
         if (type === VertexType.GROUP_ITEM) {
             this.shape.width = G_WIDTH - (G_PADDING + 1) * 2
             this.shape.height = G_ITEM_HEIGHT
+            this.shape.groupable = true
         }
 
         this.view = this.viewFactory(type)
@@ -140,6 +141,7 @@ class VertexModel extends BaseModel implements IVertexModel {
     setType(type: VertexType): void {
         let buttons = this.view.getButtons()
         // 重新初始化视图信息
+        this.type = type
         this.init(type)
         this.view.setButtons(buttons)
         this.view.update()

@@ -65,6 +65,7 @@ export type TVertextShape = {
     height?: number
     text?: string
     icon?: RenderText
+    groupable?: boolean
 }
 
 /**

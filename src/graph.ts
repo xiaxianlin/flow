@@ -14,7 +14,7 @@ class Graph implements IGraph {
     }
 
     removeVertex(v: IVertexModel): void {
-        throw new Error('Method not implemented.')
+        this.vertices.delete(v.id)
     }
 
     getVertex(id: string) {

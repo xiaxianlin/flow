@@ -19,8 +19,8 @@ let buttons = [
 flow.addVertex('event', { x: 500, y: 100, text: '开始' }, buttons)
 flow.addVertex('event', { x: 500, y: 300, text: '结束' })
 
-flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon }, buttons)
-flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon }, buttons)
+flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon, groupable: true }, buttons)
+flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon, groupable: true }, buttons)
 flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, buttons)
 
 flow.addVertex('confluence', { x: 800, y: 200 }, buttons)
@@ -39,8 +39,11 @@ let groupButtons = buttons.concat([
     { type: 'group', icon: editIcon, handler: () => console.log('edit group') },
 ])
 
-let gid = flow.addVertex('group', { x: 800, y: 300, text: '任务分组_1', icon: autoIcon }, groupButtons)
+let gid = flow.addVertex('group', { x: 100, y: 500, text: '任务分组_1', icon: autoIcon }, groupButtons)
+
+let gid2 = flow.addVertex('group', { x: 400, y: 500, text: '任务分组_2', icon: autoIcon }, groupButtons)
 
 flow.addGroupItem(gid, { text: '任务1', icon: actionIcon }, buttons)
+flow.addGroupItem(gid2, { text: '任务2', icon: actionIcon }, buttons)
 
 flow.on({})

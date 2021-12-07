@@ -49,7 +49,6 @@ class BaseView implements IView {
     }
 
     protected handleDragStart(evt: ElementEvent) {
-        setVertexZ(this.view, 1)
         this.handleEvent('dragstart', evt)
     }
 

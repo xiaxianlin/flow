@@ -26,7 +26,7 @@ class GroupItemView extends BaseView implements IGroupItemView {
 
         let lines = cutText(text, FONT_SIZE, width - 40)
         let tStyle: TextStyleProps = { x: width / 2, y: height / 2, fill: this.style.color, align: 'center', verticalAlign: 'middle', fontSize: FONT_SIZE }
-        this.text = lines.map((line) => {
+        this.text = lines.slice(0, 1).map((line) => {
             let t = new Text({
                 style: {
                     text: lines.length > 1 ? line.substring(0, line.length - 1) + '...' : line,
@@ -39,10 +39,10 @@ class GroupItemView extends BaseView implements IGroupItemView {
     }
 
     renderTypeIcon() {
-        let { icon } = this.shape
+        let { icon, height } = this.shape
         if (!icon) return
 
-        icon = new Text({ style: { ...icon.style, fill: this.style.color } })
+        icon = new Text({ style: { ...icon.style, fill: this.style.color, y: height / 2 } })
         this.view.add(icon)
     }
 
@@ -61,6 +61,12 @@ class GroupItemView extends BaseView implements IGroupItemView {
         this.renderTypeIcon()
         this.renderText()
         return this.view
+    }
+
+    update() {
+        this.renderBackground()
+        this.renderTypeIcon()
+        this.renderText()
     }
 }
 
