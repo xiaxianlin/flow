@@ -40,10 +40,11 @@ let groupButtons = buttons.concat([
 ])
 
 let gid = flow.addVertex('group', { x: 100, y: 500, text: '任务分组_1', icon: autoIcon }, groupButtons)
+flow.addGroupItem(gid, { text: '任务1', icon: actionIcon }, buttons)
 
 let gid2 = flow.addVertex('group', { x: 400, y: 500, text: '任务分组_2', icon: autoIcon }, groupButtons)
-
-flow.addGroupItem(gid, { text: '任务1', icon: actionIcon }, buttons)
 flow.addGroupItem(gid2, { text: '任务2', icon: actionIcon }, buttons)
 
-flow.on({})
+flow.on('click', (model) => {
+    console.log('click', model)
+})

@@ -8,12 +8,13 @@ export type RenderText = Text
 
 export type TPosition = [number, number]
 
+export type TEventHandler = (...args: any[]) => void
 /**
  * 按钮
  */
 export type TButton = {
     icon: Text
-    handler: (...args: any[]) => void
+    handler: TEventHandler
 }
 
 /**
@@ -21,7 +22,7 @@ export type TButton = {
  */
 export type TEvent = {
     name: string
-    handler: (...args: any[]) => void
+    handler: TEventHandler
 }
 
 export type TEvents = {

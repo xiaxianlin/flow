@@ -2,7 +2,7 @@ import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME, V_HEIGHT, V_WIDTH } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
-import { RenderType, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { RenderType, TEventHandler, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
 import { GraphEvent, MoveType } from './constant/graph'
@@ -26,6 +26,7 @@ class Container implements IContainer {
     private theme: TTheme
     private graph: IGraph
     private layer: RenderType
+    private events: Map<GraphEvent, TEventHandler>
     private active: IVertexModel
     private moveType: MoveType
 
@@ -85,8 +86,7 @@ class Container implements IContainer {
 
     private handleClick(evt: ElementEvent) {
         if (!evt.target && !!this.active) {
-            this.active.setStatus(VertexStatus.NONE)
-            this.active = null
+            this.setActive(null)
         }
     }
 
@@ -107,16 +107,20 @@ class Container implements IContainer {
         this.dragTarget = null
     }
 
+    private handleMoveMove(evt: ElementEvent) {}
+
     constructor(container: HTMLElement, width?: number, height?: number) {
-        this.render = init(container, { width, height, renderer: 'svg' })
+        this.render = init(container, { width, height, renderer: 'react' })
         this.graph = new Graph()
-        this.layer = new Group({ draggable: true, x: 0, y: 0 })
+        this.layer = new Group({ x: 0, y: 0 })
         this.theme = Object.assign({}, DEFAULT_THEME)
+        this.events = new Map()
 
         this.render.add(this.layer)
 
         this.render.on('click', (evt) => this.handleClick(evt))
         this.render.on('drop', (evt) => this.handleDrop(evt))
+        this.render.on('mousemove', (evt) => this.handleMoveMove(evt))
     }
 
     setActive(model: IVertexModel): void {
@@ -124,6 +128,10 @@ class Container implements IContainer {
             this.active.setStatus(VertexStatus.NONE)
         }
         this.active = model
+        let handler = this.events.get(GraphEvent.CLICK)
+        if (handler) {
+            handler(model)
+        }
     }
 
     setDragTarget(model: IVertexModel, evt: ElementEvent): void {
@@ -173,7 +181,13 @@ class Container implements IContainer {
         return i.id
     }
 
-    on(events: TEvents): void {}
+    on(name: GraphEvent, fn: TEventHandler): void {
+        this.events.set(name, fn)
+    }
+
+    off(name: GraphEvent): void {
+        this.events.delete(name)
+    }
 }
 
 export default Container

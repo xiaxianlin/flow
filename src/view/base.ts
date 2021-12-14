@@ -137,6 +137,12 @@ class BaseView implements IView {
                 style: { fill: background, stroke: border, opacity: 0 },
                 cursor: 'crosshair',
             })
+            c.on('mouseover', (e) => {
+                this.view.attr({ draggable: false })
+            })
+            c.on('mouseout', (e) => {
+                this.view.attr({ draggable: true })
+            })
             this.view.add(c)
             return c
         })
