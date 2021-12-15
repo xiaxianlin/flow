@@ -1,5 +1,6 @@
 import { BoundingRect, ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
+import { GraphEvent } from '../constant/graph'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
 import { parentContainChild } from '../logic/vertex'
@@ -19,12 +20,19 @@ class VertexModel extends BaseModel implements IVertexModel {
     private children: IVertexModel[] = []
     private group: IVertexModel
 
-    private handleClick() {
+    private handleClick(evt: ElementEvent) {
         if (this.status === VertexStatus.ACTIVE) return
+
         this.status = VertexStatus.ACTIVE
-        this.contaienr.setActive(this)
         this.view.setStyle(this.isGroup ? this.theme.groupActive : this.theme.vertexActive)
         this.view.showButtonLayer()
+
+        this.contaienr.setActive(this)
+        this.contaienr.fire(GraphEvent.CLICK, this)
+    }
+
+    private handleDoubleClick(evt: ElementEvent) {
+        this.contaienr.fire(GraphEvent.DBCLICK, this)
     }
 
     private handleDragStart(evt: ElementEvent) {
@@ -101,7 +109,8 @@ class VertexModel extends BaseModel implements IVertexModel {
         if (this.view) {
             this.view.setModel(this)
             this.view.setEvents([
-                { name: 'click', handler: () => this.handleClick() },
+                { name: 'click', handler: (evt) => this.handleClick(evt) },
+                { name: 'dbclick', handler: (evt) => this.handleDoubleClick(evt) },
                 { name: 'dragstart', handler: (evt) => this.handleDragStart(evt) },
             ])
         }

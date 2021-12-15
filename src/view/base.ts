@@ -60,7 +60,7 @@ class BaseView implements IView {
         this.view.on('mouseover', (evt) => this.handleMouseOver(evt))
         this.view.on('mouseout', (evt) => this.handleMouseLeave(evt))
         this.view.on('click', (evt) => this.handleClick(evt))
-        this.view.on('dbclick', (evt) => this.handleDBClick(evt))
+        this.view.on('dblclick', (evt) => this.handleDBClick(evt))
         this.view.on('dragstart', (evt) => this.handleDragStart(evt))
         this.view.on('dragend', (evt) => this.handleDragEnd(evt))
     }

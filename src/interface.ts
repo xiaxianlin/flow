@@ -20,6 +20,8 @@ export interface IContainer {
     addVertex(type: VertexType, shape?: TVertextShape, buttons?: TVertexButtonProp[]): string
     addGroupItem(id: string, shape?: TVertextShape, buttons?: TVertexButtonProp[]): void
     on(name: GraphEvent, fn: TEventHandler): void
+    off(name: GraphEvent): void
+    fire(name: GraphEvent, ...args: any[]): void
 }
 
 export interface IModel {

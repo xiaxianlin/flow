@@ -46,5 +46,13 @@ let gid2 = flow.addVertex('group', { x: 400, y: 500, text: '任务分组_2', ico
 flow.addGroupItem(gid2, { text: '任务2', icon: actionIcon }, buttons)
 
 flow.on('click', (model) => {
-    console.log('click', model)
+    console.group('click')
+    console.log(model)
+    console.groupEnd()
+})
+
+flow.on('dbclick', (model) => {
+    console.group('dbclick')
+    console.log(model)
+    console.groupEnd()
 })

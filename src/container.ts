@@ -88,6 +88,11 @@ class Container implements IContainer {
         if (!evt.target && !!this.active) {
             this.setActive(null)
         }
+        this.fire(GraphEvent.CLICK, this.active)
+    }
+
+    private handleDoubleClick(evt: ElementEvent) {
+        // this.fire(GraphEvent.DBCLICK, this.active)
     }
 
     private handleDrop(evt: ElementEvent) {
@@ -119,6 +124,7 @@ class Container implements IContainer {
         this.render.add(this.layer)
 
         this.render.on('click', (evt) => this.handleClick(evt))
+        this.render.on('dblclick', (evt) => this.handleDoubleClick(evt))
         this.render.on('drop', (evt) => this.handleDrop(evt))
         this.render.on('mousemove', (evt) => this.handleMoveMove(evt))
     }
@@ -128,10 +134,6 @@ class Container implements IContainer {
             this.active.setStatus(VertexStatus.NONE)
         }
         this.active = model
-        let handler = this.events.get(GraphEvent.CLICK)
-        if (handler) {
-            handler(model)
-        }
     }
 
     setDragTarget(model: IVertexModel, evt: ElementEvent): void {
@@ -187,6 +189,15 @@ class Container implements IContainer {
 
     off(name: GraphEvent): void {
         this.events.delete(name)
+    }
+
+    fire(name: GraphEvent, ...args: any[]): void {
+        if (!this.events.has(name)) return
+
+        let handler = this.events.get(name)
+        if (typeof handler === 'function') {
+            handler(...args)
+        }
     }
 }
 
