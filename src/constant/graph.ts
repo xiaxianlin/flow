@@ -17,3 +17,10 @@ export const enum GraphEvent {
     CLICK = 'click',
     DBCLICK = 'dbclick',
 }
+
+export const enum Position {
+    LEFT = 'left',
+    RIGHT = 'right',
+    TOP = 'top',
+    BOTTOM = 'bottom',
+}

@@ -1,7 +1,7 @@
 import { BoundingRect, ElementEvent } from 'zrender'
-import { GraphEvent } from './constant/graph'
+import { GraphEvent, Position } from './constant/graph'
 import { VertexStatus, VertexType } from './constant/vertex'
-import { RenderType, TEvent, TEventHandler, TEvents, TStyle, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { RenderType, TEvent, TEventHandler, TEvents, TPosition, TStyle, TTheme, TVertexButtonProp, TVertextShape } from './type'
 
 export interface IGraph {
     addVertex(v: IVertexModel): void
@@ -25,14 +25,7 @@ export interface IContainer {
 }
 
 export interface IModel {
-    /**
-     * 渲染顶点
-     */
     render(): RenderType
-    /**
-     * 设置顶点模型的容器
-     * @param container 容器
-     */
     setContainer(container: IContainer): void
 }
 
@@ -52,13 +45,20 @@ export interface IVertexModel extends IModel {
     getGroup(): IVertexModel
     getView(): RenderType
     getBoundingRect(): BoundingRect
+    getConnectorPosition(pos: Position): TPosition
 
     add(child: IVertexModel): void
     remove(child: IVertexModel): void
     inView(): boolean
 }
 
-export interface IEdgeModel extends IModel {}
+export interface IEdgeModel extends IModel {
+    setSource(source: IVertexModel, connectorPosition: Position): void
+    setTarget(target: IVertexModel, connectorPosition: Position): void
+
+    getSource(): [IVertexModel, Position]
+    getTarget(): [IVertexModel, Position]
+}
 
 export interface IView {
     setModel(model: IModel): void

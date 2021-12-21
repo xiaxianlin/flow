@@ -1,9 +1,9 @@
 import { BoundingRect, ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
-import { GraphEvent } from '../constant/graph'
+import { GraphEvent, Position } from '../constant/graph'
 import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
 import { IVertexModel, IView } from '../interface'
-import { parentContainChild } from '../logic/vertex'
+import { generateConnectPoints, getConnectorIndexByPosition, parentContainChild } from '../logic/vertex'
 import { RenderType, TPosition, TStyle, TTheme, TVertexButtonProp, TVertextShape } from '../type'
 import ConfluenceView from '../view/confluence'
 import EventView from '../view/event'
@@ -175,6 +175,13 @@ class VertexModel extends BaseModel implements IVertexModel {
     getBoundingRect(): BoundingRect {
         let { x, y, width, height } = this.shape
         return new BoundingRect(x, y, width, height)
+    }
+
+    getConnectorPosition(pos: Position): TPosition {
+        let points: TPosition[] = generateConnectPoints(this.shape)
+        let index = getConnectorIndexByPosition(pos)
+        let connector = points[index]
+        return [this.shape.x + connector[0], this.shape.y + connector[1]]
     }
 
     add(child: IVertexModel): void {

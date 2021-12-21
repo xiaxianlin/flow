@@ -1,5 +1,6 @@
 import { BoundingRect } from 'zrender'
 import { V_WIDTH } from '../constant'
+import { Position } from '../constant/graph'
 import { IVertexModel } from '../interface'
 import { RenderType, TPosition, TVertextShape } from '../type'
 
@@ -76,4 +77,19 @@ export function getCoveredVertices(br: BoundingRect, bgVertices: IVertexModel[])
         }
     })
     return indices.map((i) => bgVertices[i])
+}
+
+export function getConnectorIndexByPosition(pos: Position): number {
+    switch (pos) {
+        case Position.TOP:
+            return 0
+        case Position.RIGHT:
+            return 1
+        case Position.BOTTOM:
+            return 2
+        case Position.LEFT:
+            return 3
+        default:
+            return -1
+    }
 }
