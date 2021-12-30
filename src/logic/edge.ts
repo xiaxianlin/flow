@@ -3,7 +3,7 @@ import { IEdgeModel, IVertexModel } from '../interface'
 import { TPosition } from '../type'
 
 const MIN_GAP = 20
-const POINT_RADIUS = 4
+const POINT_RADIUS = 3
 
 type props = {
     ex: number // 结束点X
@@ -505,7 +505,10 @@ function calcLinePoints(edge: IEdgeModel) {
 
     let [source, sp] = edge.getSource()
     let [target, tp] = edge.getTarget()
-    let [ex, ey] = target.getConnectorPosition(tp)
+    let [sx, sy] = source.getConnectorPosition(sp)
+    let [tx, ty] = target.getConnectorPosition(tp)
+    let ex = tx - sx
+    let ey = ty - sy
 
     let ss = source.getShape()
     let ts = target.getShape()
@@ -561,4 +564,30 @@ function clacTextAxis(points: TPosition[]) {
     return { x, y }
 }
 
-export { calcLinePoints, clacTextAxis }
+/**
+ * 创建箭头
+ * @param {Array} points 线的顶点
+ */
+function createArraw(points: number[][]) {
+    let offset = 6
+    let len = points.length
+    let refer = points[len - 2]
+    let last = points[len - 1]
+    let arrawPoints = []
+    // Y轴相等
+    if (refer[1] == last[1]) {
+        // 判断箭头朝向
+        offset = refer[0] > last[0] ? offset : -offset
+        arrawPoints.push([last[0] + offset, last[1] + offset])
+        arrawPoints.push([last[0], last[1]])
+        arrawPoints.push([last[0] + offset, last[1] - offset])
+    } else if (refer[0] == last[0]) {
+        offset = refer[1] > last[1] ? offset : -offset
+        arrawPoints.push([last[0] + offset, last[1] + offset])
+        arrawPoints.push([last[0], last[1]])
+        arrawPoints.push([last[0] - offset, last[1] + offset])
+    }
+    return arrawPoints
+}
+
+export { calcLinePoints, clacTextAxis, createArraw }

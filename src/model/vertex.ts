@@ -1,8 +1,8 @@
 import { BoundingRect, ElementEvent } from 'zrender'
 import { G_HEAD_HEIGHT, G_HEIGHT, G_ITEM_HEIGHT, G_PADDING, G_WIDTH, V_HEIGHT, V_WIDTH } from '../constant'
 import { GraphEvent, Position } from '../constant/graph'
-import { VertexPropType, VertexStatus, VertexType } from '../constant/vertex'
-import { IVertexModel, IView } from '../interface'
+import { VertexStatus, VertexType } from '../constant/vertex'
+import { IEdgeModel, IVertexModel, IVertexView } from '../interface'
 import { generateConnectPoints, getConnectorIndexByPosition, parentContainChild } from '../logic/vertex'
 import { RenderType, TPosition, TStyle, TTheme, TVertexButtonProp, TVertextShape } from '../type'
 import ConfluenceView from '../view/confluence'
@@ -15,10 +15,12 @@ import BaseModel from './base'
 class VertexModel extends BaseModel implements IVertexModel {
     type: VertexType
     isGroup: boolean = false
+    protected view: IVertexView
     private status: VertexStatus
     private shape: TVertextShape
     private children: IVertexModel[] = []
     private group: IVertexModel
+    private edges: Set<IEdgeModel>
 
     private handleClick(evt: ElementEvent) {
         if (this.status === VertexStatus.ACTIVE) return
@@ -61,7 +63,7 @@ class VertexModel extends BaseModel implements IVertexModel {
      * @param type 视图类型
      * @returns 视图
      */
-    private viewFactory(type: VertexType): IView {
+    private viewFactory(type: VertexType): IVertexView {
         let { vertex, vertexButton, vertexConnector } = this.theme
         let baseArgs: [TVertextShape, TStyle, TStyle, TStyle] = [this.shape, vertex, vertexButton, vertexConnector]
         let view = null
@@ -122,6 +124,7 @@ class VertexModel extends BaseModel implements IVertexModel {
         this.shape = Object.assign({}, { x: 10, y: 10, width: V_WIDTH, height: V_HEIGHT }, shape)
         this.theme = theme
         this.status = VertexStatus.NONE
+        this.edges = new Set()
         this.isGroup = type === VertexType.GROUP
         this.init(type)
     }
@@ -182,6 +185,14 @@ class VertexModel extends BaseModel implements IVertexModel {
         let index = getConnectorIndexByPosition(pos)
         let connector = points[index]
         return [this.shape.x + connector[0], this.shape.y + connector[1]]
+    }
+
+    addEdge(edge: IEdgeModel): void {
+        this.edges.add(edge)
+    }
+
+    removeEdge(edge: IEdgeModel): void {
+        this.edges.delete(edge)
     }
 
     add(child: IVertexModel): void {

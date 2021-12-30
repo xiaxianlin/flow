@@ -3,10 +3,10 @@ import { G_HEAD_HEIGHT, G_WIDTH, V_RADIUS } from '../constant'
 import { VertexButtonType } from '../constant/vertex'
 import { IGroupView, IVertexModel } from '../interface'
 import { cutText, generateConnectPoints } from '../logic/vertex'
-import { TPosition, TStyle, TVertexButtonProp, TVertextShape } from '../type'
-import BaseView from './base'
+import { TPosition, TStyle, TVertexButtonProp } from '../type'
+import BaseVertextView from './base_vertex'
 
-class GroupView extends BaseView implements IGroupView {
+class GroupView extends BaseVertextView implements IGroupView {
     protected model: IVertexModel
     private headerIcon: Text
     private headerText: Text

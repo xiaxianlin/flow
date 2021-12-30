@@ -1,27 +1,52 @@
 import { Position } from '../constant/graph'
-import { IEdgeModel, IVertexModel } from '../interface'
+import { IEdgeModel, IEdgeView, IVertexModel } from '../interface'
+import { calcLinePoints } from '../logic/edge'
+import { TEdgeShape, TTheme } from '../type'
+import LineView from '../view/line'
 import BaseModel from './base'
 
 class EdgeModel extends BaseModel implements IEdgeModel {
+    private shape: TEdgeShape
     private source: IVertexModel
-    private sourceConnectorPosition: Position
+    private sourcePosition: Position
     private target: IVertexModel
-    private targetConnectorPosition: Position
+    private targetPosition: Position
+    private points: number[][]
 
-    setSource(source: IVertexModel, connectorPosition: Position): void {
-        this.source = source
-        this.sourceConnectorPosition = connectorPosition
+    protected view: IEdgeView
+
+    private calc() {
+        if (!(this.source && this.sourcePosition && this.target && this.targetPosition)) return
+        this.points = calcLinePoints(this)
+        this.view.setPoints(this.points)
     }
-    setTarget(target: IVertexModel, connectorPosition: Position): void {
+
+    constructor(shape: TEdgeShape, theme: TTheme) {
+        super()
+        this.shape = shape
+        this.theme = theme
+        this.points = []
+        this.view = new LineView(shape, theme.edge)
+    }
+
+    setSource(source: IVertexModel, position: Position): void {
+        this.source = source
+        this.sourcePosition = position
+        let cp = source.getConnectorPosition(position)
+        this.view.setShape({ x: cp[0], y: cp[1] })
+        this.calc()
+    }
+    setTarget(target: IVertexModel, position: Position): void {
         this.target = target
-        this.targetConnectorPosition = connectorPosition
+        this.targetPosition = position
+        this.calc()
     }
 
     getSource(): [IVertexModel, Position] {
-        return [this.source, this.sourceConnectorPosition]
+        return [this.source, this.sourcePosition]
     }
     getTarget(): [IVertexModel, Position] {
-        return [this.target, this.targetConnectorPosition]
+        return [this.target, this.targetPosition]
     }
 }
 

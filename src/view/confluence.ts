@@ -2,9 +2,9 @@ import { Circle, Isogon } from 'zrender'
 import { V_HEIGHT } from '../constant'
 import { IConfluenceView, IVertexModel } from '../interface'
 import { TStyle } from '../type'
-import BaseView from './base'
+import BaseVertextView from './base_vertex'
 
-class ConfluenceView extends BaseView implements IConfluenceView {
+class ConfluenceView extends BaseVertextView implements IConfluenceView {
     protected model: IVertexModel
     private icon: Circle
 

@@ -79,3 +79,9 @@ export type TVertexButtonProp = {
     style?: TStyle
     activeStyle?: TStyle
 }
+
+export type TEdgeShape = {
+    x?: number
+    y?: number
+    text?: string
+}

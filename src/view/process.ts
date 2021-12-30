@@ -2,10 +2,10 @@ import { Rect, Text, TextStyleProps } from 'zrender'
 import { FONT_SIZE, V_RADIUS } from '../constant'
 import { IProcessView, IVertexModel } from '../interface'
 import { cutText } from '../logic/vertex'
-import { TStyle, TVertextShape } from '../type'
-import BaseView from './base'
+import { TStyle } from '../type'
+import BaseVertextView from './base_vertex'
 
-class ProcessView extends BaseView implements IProcessView {
+class ProcessView extends BaseVertextView implements IProcessView {
     protected model: IVertexModel
     protected innerButtonStyle: TStyle
 

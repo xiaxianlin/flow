@@ -2,11 +2,12 @@ import { init, ZRenderType, ElementEvent, Text, Group } from 'zrender'
 import { DEFAULT_THEME, V_HEIGHT, V_WIDTH } from './constant'
 import { VertexStatus, VertexType } from './constant/vertex'
 import Graph from './graph'
-import { RenderType, TEventHandler, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
+import { RenderType, TEdgeShape, TEventHandler, TEvents, TPosition, TTheme, TVertexButtonProp, TVertextShape } from './type'
 import { IContainer, IGraph, IVertexModel } from './interface'
 import VertexModel from './model/Vertex'
-import { GraphEvent, MoveType } from './constant/graph'
+import { GraphEvent, MoveType, Position } from './constant/graph'
 import { getCoveredVertices } from './logic/vertex'
+import EdgeModel from './model/edge'
 
 class Container implements IContainer {
     /**
@@ -181,6 +182,25 @@ class Container implements IContainer {
         v.add(i)
         i.setGroup(v)
         return i.id
+    }
+
+    addEdge(startId: string, startPosition: Position, endId: string, endPosition: Position, shape: TEdgeShape) {
+        let vStart = this.graph.getVertex(startId)
+        let vEnd = this.graph.getVertex(endId)
+        if (!vStart || !vEnd) return
+
+        let e = new EdgeModel(shape, this.theme)
+        e.setContainer(this)
+        e.setSource(vStart, startPosition)
+        e.setTarget(vEnd, endPosition)
+
+        vStart.addEdge(e)
+        vEnd.addEdge(e)
+
+        this.graph.addEdge(e)
+        this.layer.add(e.render())
+
+        return e.id
     }
 
     on(name: GraphEvent, fn: TEventHandler): void {

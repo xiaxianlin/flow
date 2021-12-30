@@ -47,6 +47,9 @@ export interface IVertexModel extends IModel {
     getBoundingRect(): BoundingRect
     getConnectorPosition(pos: Position): TPosition
 
+    addEdge(edge: IEdgeModel): void
+    removeEdge(edge: IEdgeModel): void
+
     add(child: IVertexModel): void
     remove(child: IVertexModel): void
     inView(): boolean
@@ -63,13 +66,20 @@ export interface IEdgeModel extends IModel {
 export interface IView {
     setModel(model: IModel): void
     setEvents(events: TEvent[]): void
-    setButtons(buttons: TVertexButtonProp[]): void
     setStyle(style: TStyle): void
     setShape(shape: TVertextShape): void
+
+    getView(): RenderType
+
+    update(): void
+    render(): RenderType
+}
+
+export interface IVertexView extends IView {
+    setButtons(buttons: TVertexButtonProp[]): void
     setButtonStyle(style: TStyle): void
     setZ(z: number): void
 
-    getView(): RenderType
     getButtons(): TVertexButtonProp[]
 
     showButtonLayer(): void
@@ -77,18 +87,21 @@ export interface IView {
 
     add(view: RenderType): void
     remove(view: RenderType): void
-    update(): void
-    render(): RenderType
 }
-export interface IProcessView extends IView {
+
+export interface IProcessView extends IVertexView {
     setInnerButtonStyle(style: TStyle): void
 }
-export interface IEventView extends IView {}
-export interface IConfluenceView extends IView {}
-export interface IGroupView extends IView {
+export interface IEventView extends IVertexView {}
+export interface IConfluenceView extends IVertexView {}
+export interface IGroupView extends IVertexView {
     setGroupHeaderStyle(style: TStyle): void
     setGroupButtonStyle(style: TStyle): void
 }
-export interface IGroupItemView extends IView {
+export interface IGroupItemView extends IVertexView {
     setInnerButtonStyle(style: TStyle): void
+}
+
+export interface IEdgeView extends IView {
+    setPoints(points: number[][]): void
 }

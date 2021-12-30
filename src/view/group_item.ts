@@ -3,9 +3,9 @@ import { FONT_SIZE, V_RADIUS } from '../constant'
 import { IGroupItemView, IVertexModel } from '../interface'
 import { cutText } from '../logic/vertex'
 import { TStyle } from '../type'
-import BaseView from './base'
+import BaseVertextView from './base_vertex'
 
-class GroupItemView extends BaseView implements IGroupItemView {
+class GroupItemView extends BaseVertextView implements IGroupItemView {
     protected model: IVertexModel
     protected innerButtonStyle: TStyle
 

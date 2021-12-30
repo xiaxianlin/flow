@@ -39,7 +39,7 @@ export const DEFAULT_THEME: TTheme = {
         background: '#ffffff',
     },
     edge: {
-        border: '#d3d9e2',
+        border: '#5a97f2',
     },
     edgeActive: {
         border: '#5a97f2',

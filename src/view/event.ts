@@ -1,9 +1,9 @@
 import { Circle, Text, TextStyleProps } from 'zrender'
 import { FONT_SIZE, V_HEIGHT } from '../constant'
 import { IEventView, IVertexModel } from '../interface'
-import BaseView from './base'
+import BaseVertextView from './base_vertex'
 
-class EventView extends BaseView implements IEventView {
+class EventView extends BaseVertextView implements IEventView {
     protected model: IVertexModel
 
     renderText() {

@@ -19,9 +19,9 @@ let buttons = [
 flow.addVertex('event', { x: 500, y: 100, text: '开始' }, buttons)
 flow.addVertex('event', { x: 500, y: 300, text: '结束' })
 
-flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon, groupable: true }, buttons)
+let sid = flow.addVertex('process', { x: 100, y: 100, text: '测试01', icon: actionIcon, groupable: true }, buttons)
 flow.addVertex('process', { x: 100, y: 300, text: 'echo执行目标为节点输出', icon: worlfowIcon, groupable: true }, buttons)
-flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, buttons)
+let tid = flow.addVertex('process', { x: 300, y: 300, text: '执行目标为节点输出执行目标为节点输出执行目标为节点输出', icon: manualIcon }, buttons)
 
 flow.addVertex('confluence', { x: 800, y: 200 }, buttons)
 
@@ -45,14 +45,16 @@ flow.addGroupItem(gid, { text: '任务1', icon: actionIcon }, buttons)
 let gid2 = flow.addVertex('group', { x: 400, y: 500, text: '任务分组_2', icon: autoIcon }, groupButtons)
 flow.addGroupItem(gid2, { text: '任务2', icon: actionIcon }, buttons)
 
-flow.on('click', (model) => {
-    console.group('click')
-    console.log(model)
-    console.groupEnd()
-})
+flow.addEdge(sid, 'right', tid, 'right', { text: 'test' })
 
-flow.on('dbclick', (model) => {
-    console.group('dbclick')
-    console.log(model)
-    console.groupEnd()
-})
+// flow.on('click', (model) => {
+//     console.group('click')
+//     console.log(model)
+//     console.groupEnd()
+// })
+
+// flow.on('dbclick', (model) => {
+//     console.group('dbclick')
+//     console.log(model)
+//     console.groupEnd()
+// })
